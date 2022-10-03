@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "555761027348",
+    "project_id": "remiza-osp",
+    "storage_bucket": "remiza-osp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555761027348:android:23fd852023048de9571a01",
+        "android_client_info": {
+          "package_name": "edu.wseiz.remizaosp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555761027348-uiqo7bhlssfonbehojhgk87siechrs2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy3SjaM66bHXLSJiwxFkTzM39qNLa4ybU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555761027348-uiqo7bhlssfonbehojhgk87siechrs2g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
