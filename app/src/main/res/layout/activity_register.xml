@@ -6,4 +6,123 @@
     android:layout_height="match_parent"
     tools:context=".Register">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:text="Zarejestruj się"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/h1"
+        app:layout_constraintStart_toStartOf="@id/v1"
+        app:layout_constraintEnd_toEndOf="@+id/v2"
+
+        />
+
+
+    <EditText
+        android:id="@+id/emailbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="E-mail"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+
+        app:layout_constraintTop_toTopOf="@id/h1"
+        app:layout_constraintStart_toStartOf="@id/v1"
+        app:layout_constraintEnd_toEndOf="@+id/v2"
+
+        />
+
+    <EditText
+        android:id="@+id/passwordbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Hasło"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:inputType="textPassword"
+
+        app:layout_constraintTop_toTopOf="@id/h2"
+        app:layout_constraintStart_toStartOf="@id/v1"
+        app:layout_constraintEnd_toEndOf="@+id/v2"
+
+        />
+
+    <Button
+        android:id="@+id/signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Utwórz nowe konto"
+
+        android:textSize="15sp"
+
+        app:layout_constraintTop_toTopOf="@id/h3"
+        app:layout_constraintStart_toStartOf="@id/v1"
+        app:layout_constraintEnd_toEndOf="@+id/v2"
+        />
+
+    <TextView
+        android:id="@+id/goBackToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="Masz już konto? Zaloguj się."
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toEndOf="@+id/v2"
+        app:layout_constraintStart_toStartOf="@id/v1"
+        app:layout_constraintTop_toTopOf="@id/h4"
+        tools:ignore="TouchTargetSizeCheck" />
+
+
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.48" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

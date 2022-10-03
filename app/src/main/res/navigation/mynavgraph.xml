@@ -9,5 +9,11 @@
         android:id="@+id/dashboardFragment"
         android:name="edu.wseiz.remizaosp.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <argument
+            android:name="FirebaseUser"
+            app:argType="com.google.firebase.auth.FirebaseUser"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

@@ -11,11 +11,13 @@ import androidx.navigation.Navigation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,24 +29,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
 
-        if (fAuth.getCurrentUser() != null)
+        if (user == null)
         {
-            ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    result -> {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent data = result.getData();
-                            //result from activity
-
-                        }
-                    });
-
-            Intent intent = new Intent(this, Login.class);
-            //intent.putExtra("target", "");
-            activityLauncher.launch(intent);
+            Intent myIntent = new Intent(MainActivity.this, Login.class);
+            //myIntent.putExtra("key", value); //Optional parameters
+            MainActivity.this.startActivity(myIntent);
 
         }
+
+
 
 
     }
