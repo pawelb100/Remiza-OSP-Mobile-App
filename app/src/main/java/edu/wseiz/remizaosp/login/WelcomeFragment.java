@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp;
+package edu.wseiz.remizaosp.login;
 
 import android.os.Bundle;
 
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.databinding.FragmentWelcomeBinding;
 
 public class WelcomeFragment extends Fragment {

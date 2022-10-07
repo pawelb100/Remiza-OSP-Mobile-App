@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp;
+package edu.wseiz.remizaosp.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,20 +13,21 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import edu.wseiz.remizaosp.databinding.ActivityLoginBinding;
-import edu.wseiz.remizaosp.databinding.FragmentLoginBinding;
+import java.util.Objects;
 
-public class LoginFragment extends Fragment {
+import edu.wseiz.remizaosp.MainActivity;
+import edu.wseiz.remizaosp.databinding.FragmentRegisterBinding;
 
-    private FragmentLoginBinding binding;
+public class RegisterFragment extends Fragment {
+
+    private FragmentRegisterBinding binding;
     private FirebaseAuth fAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        binding =  FragmentRegisterBinding.inflate(inflater, container, false);
 
         fAuth = FirebaseAuth.getInstance();
-
 
         binding.signin.setOnClickListener(view -> {
 
@@ -37,17 +38,17 @@ public class LoginFragment extends Fragment {
             {
                 if(!(pass.isEmpty()))
                 {
-                    fAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+                    fAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
                         if(task.isSuccessful())
                         {
-                            Toast.makeText(getActivity(), "Logowanie udane", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Rejestracja udana", Toast.LENGTH_SHORT).show();
                             Intent activityIntent = new Intent(getActivity(), MainActivity.class);
                             startActivity(activityIntent);
                             requireActivity().finish();
                         }
                         else
                         {
-                            Toast.makeText(getActivity(), "Logowanie nieudane", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Rejestracja nieudana", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -55,12 +56,10 @@ public class LoginFragment extends Fragment {
 
         });
 
-        binding.openRegister.setOnClickListener(view -> {
+        binding.goBackToLogin.setOnClickListener(view -> {
             Navigation.findNavController(view).popBackStack();
 
         });
-
-
 
         return binding.getRoot();
     }
