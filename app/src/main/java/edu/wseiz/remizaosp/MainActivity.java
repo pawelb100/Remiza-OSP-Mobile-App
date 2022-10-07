@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,16 +33,11 @@ public class MainActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
 
-        if (user == null)
-        {
-            Intent myIntent = new Intent(MainActivity.this, Login.class);
-            //myIntent.putExtra("key", value); //Optional parameters
-            MainActivity.this.startActivity(myIntent);
-
+        if (user == null) {
+            startActivity(new Intent(MainActivity.this, Login.class));
         }
 
 
-
-
     }
+
 }

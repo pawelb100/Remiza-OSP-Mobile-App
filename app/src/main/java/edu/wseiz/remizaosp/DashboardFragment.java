@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +32,11 @@ public class DashboardFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
 
-        if (user != null)
+        if (user == null)
         {
-            Toast.makeText(getActivity(), user.getEmail(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), user.getEmail(), Toast.LENGTH_SHORT).show();
+            //Navigation.findNavController().navigate(R.id.action_hideoutView_to_townView);
+
         }
 
         binding.signout.setOnClickListener(new View.OnClickListener() {
