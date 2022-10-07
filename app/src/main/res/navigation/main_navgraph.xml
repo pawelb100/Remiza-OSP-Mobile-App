@@ -8,6 +8,19 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="edu.wseiz.remizaosp.main.DashboardFragment"
-        android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_firefighterListFragment2"
+            app:destination="@id/firefighterListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/firefighterListFragment"
+        android:name="edu.wseiz.remizaosp.FirefighterListFragment"
+        android:label="Firefighter List"
+        tools:layout="@layout/fragment_firefighter_list">
+        <action
+            android:id="@+id/action_firefighterListFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
 </navigation>
