@@ -43,7 +43,10 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 fAuth.signOut();
-                Toast.makeText(getActivity(), "Signed Out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Wylogowano", Toast.LENGTH_SHORT).show();
+                Intent activityIntent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(activityIntent);
+                requireActivity().finish();
             }
         });
 

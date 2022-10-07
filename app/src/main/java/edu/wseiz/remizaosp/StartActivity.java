@@ -22,7 +22,7 @@ public class StartActivity extends AppCompatActivity {
         if (user != null) {
             activityIntent = new Intent(this, MainActivity.class);
         } else {
-            activityIntent = new Intent(this, Login.class);
+            activityIntent = new Intent(this, LoginActivity.class);
         }
 
         startActivity(activityIntent);
