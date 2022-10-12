@@ -22,8 +22,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/topAppBar"
                 app:title="Remiza OSP"
+                app:titleTextColor="@color/black"
                 app:navigationIcon="@drawable/ic_baseline_menu_24"
-                android:background="@color/white"/>
+                android:background="@color/yellow"/>
 
 
 

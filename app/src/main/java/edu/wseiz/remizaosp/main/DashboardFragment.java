@@ -36,6 +36,7 @@ public class DashboardFragment extends Fragment {
 
         }
 
+        /*
         binding.signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,7 +47,7 @@ public class DashboardFragment extends Fragment {
                 requireActivity().finish();
             }
         });
-
+        */
         return binding.getRoot();
     }
 

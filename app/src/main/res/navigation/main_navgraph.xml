@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/firefighterListFragment"
-        android:name="edu.wseiz.remizaosp.FirefighterListFragment"
+        android:name="edu.wseiz.remizaosp.main.FirefighterListFragment"
         android:label="Firefighter List"
         tools:layout="@layout/fragment_firefighter_list">
         <action
