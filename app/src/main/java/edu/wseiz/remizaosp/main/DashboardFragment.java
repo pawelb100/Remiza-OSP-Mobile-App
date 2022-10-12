@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import edu.wseiz.remizaosp.LoginActivity;
 import edu.wseiz.remizaosp.databinding.FragmentDashboardBinding;
@@ -36,8 +38,15 @@ public class DashboardFragment extends Fragment {
 
         }
 
-        /*
-        binding.signout.setOnClickListener(new View.OnClickListener() {
+        binding.btnChangeStatus.setOnClickListener(v -> {
+
+
+        });
+
+
+
+
+        binding.btnAcceptEventParticipation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fAuth.signOut();
@@ -47,7 +56,7 @@ public class DashboardFragment extends Fragment {
                 requireActivity().finish();
             }
         });
-        */
+
         return binding.getRoot();
     }
 

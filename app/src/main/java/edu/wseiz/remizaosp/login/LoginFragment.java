@@ -22,22 +22,38 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private FirebaseAuth fAuth;
 
+    private Boolean verifyInput(String email, String pass) {
+        if(!(email.isEmpty())) {
+            if (!(pass.isEmpty())) {
+                return true;
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "Wprowadź hasło", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Wprowadź adres e-mail", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
 
         fAuth = FirebaseAuth.getInstance();
 
-
         binding.signin.setOnClickListener(view -> {
 
             String email = binding.emailbox.getText().toString();
             String pass = binding.passwordbox.getText().toString();
 
-            if(!(email.isEmpty()))
+            if(verifyInput(email, pass))
             {
-                if(!(pass.isEmpty()))
-                {
                     fAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
                         if(task.isSuccessful())
                         {
@@ -51,12 +67,12 @@ public class LoginFragment extends Fragment {
                             Toast.makeText(getActivity(), "Logowanie nieudane", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
+
             }
 
         });
 
-        binding.openRegister.setOnClickListener(view -> {
+        binding.gotoRegister.setOnClickListener(view -> {
             Navigation.findNavController(view).popBackStack();
 
         });

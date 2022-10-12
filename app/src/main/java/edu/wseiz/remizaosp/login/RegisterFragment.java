@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentRegisterBinding;
@@ -23,35 +24,79 @@ public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding binding;
     private FirebaseAuth fAuth;
 
+    private Boolean verifyInput(String name, String email, String pass) {
+        if (!(name.isEmpty())) {
+            if(!(email.isEmpty())) {
+                if (!(pass.isEmpty())) {
+                    return true;
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Wprowadź hasło", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "Wprowadź adres e-mail", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Wprowadź nazwę użytkownika", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+    }
+
+    private Boolean registerUser(String name, String email, String pass) {
+
+        fAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+            {
+                FirebaseUser user = fAuth.getCurrentUser();
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference ref = database.getReference().child("users").child(user.getUid());
+
+                ref.child("email").setValue(email);
+                ref.child("name").setValue(name);
+                ref.child("role").setValue("User");
+
+            }
+
+        });
+
+        return fAuth.getCurrentUser() != null;
+
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding =  FragmentRegisterBinding.inflate(inflater, container, false);
 
         fAuth = FirebaseAuth.getInstance();
 
-        binding.signin.setOnClickListener(view -> {
+        binding.signup.setOnClickListener(view -> {
 
+            String name = binding.namebox.getText().toString();
             String email = binding.emailbox.getText().toString();
             String pass = binding.passwordbox.getText().toString();
 
-            if(!(email.isEmpty()))
+            if(verifyInput(name, email, pass))
             {
-                if(!(pass.isEmpty()))
-                {
-                    fAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
-                        if(task.isSuccessful())
-                        {
-                            Toast.makeText(getActivity(), "Rejestracja udana", Toast.LENGTH_SHORT).show();
-                            Intent activityIntent = new Intent(getActivity(), MainActivity.class);
-                            startActivity(activityIntent);
-                            requireActivity().finish();
-                        }
-                        else
-                        {
-                            Toast.makeText(getActivity(), "Rejestracja nieudana", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                    if(registerUser(name, email, pass)) {
+                        Toast.makeText(getActivity(), "Rejestracja udana", Toast.LENGTH_LONG).show();
+                        Intent activityIntent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(activityIntent);
+                        requireActivity().finish();
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(), "Rejestracja nieudana", Toast.LENGTH_LONG).show();
+                    }
             }
 
         });
