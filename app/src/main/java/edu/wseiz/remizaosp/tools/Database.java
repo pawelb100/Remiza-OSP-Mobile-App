@@ -2,6 +2,10 @@ package edu.wseiz.remizaosp.tools;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +22,9 @@ public class Database {
     private FirebaseDatabase database;
     private DatabaseReference reference;
 
+    private FirebaseAuth fAuth;
+    private FirebaseUser user;
+
     private List<String> statuses;
     private List<User> users;
 
@@ -25,6 +32,8 @@ public class Database {
     {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
+        fAuth = FirebaseAuth.getInstance();
+        user = fAuth.getCurrentUser();
         statuses = new ArrayList<>();
         users = new ArrayList<>();
     }
@@ -38,6 +47,18 @@ public class Database {
     {
         return users;
     }
+
+
+    public void updateStatus(int StatusId, final DatabaseListener listener) {
+        reference.child("userstatus").child(user.getUid()).setValue(StatusId).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+                listener.onSuccess();
+            else
+                listener.onFailed(task.getException());
+        });
+    }
+
+
 
     public void fetchStatuses(final DatabaseListener listener) {
 
@@ -60,7 +81,7 @@ public class Database {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                listener.onFailed(error);
+                listener.onFailed(error.toException());
             }
         });
     }
@@ -93,7 +114,7 @@ public class Database {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                listener.onFailed(error);
+                listener.onFailed(error.toException());
             }
         });
     }

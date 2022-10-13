@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,7 +44,17 @@ public class DashboardFragment extends Fragment {
         }
 
         binding.btnChangeStatus.setOnClickListener(v -> {
+                database.updateStatus(0, new DatabaseListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(getActivity(), "Sukces", Toast.LENGTH_SHORT).show();
+                    }
 
+                    @Override
+                    public void onFailed(Exception e) {
+
+                    }
+                });
         });
 
 
@@ -51,6 +62,7 @@ public class DashboardFragment extends Fragment {
         binding.btnAcceptEventParticipation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 database.fetchUsers(new DatabaseListener() {
                     @Override
@@ -62,7 +74,7 @@ public class DashboardFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailed(DatabaseError databaseError) {
+                    public void onFailed(Exception e) {
                     }
 
                 });
