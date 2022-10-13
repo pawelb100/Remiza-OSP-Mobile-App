@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.List;
 
 import edu.wseiz.remizaosp.databinding.FragmentDashboardBinding;
+import edu.wseiz.remizaosp.models.User;
 import edu.wseiz.remizaosp.tools.Database;
 import edu.wseiz.remizaosp.tools.DatabaseListener;
 
@@ -51,10 +52,13 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                database.fetchStatuses(new DatabaseListener() {
+                database.fetchUsers(new DatabaseListener() {
                     @Override
                     public void onSuccess() {
-                        System.out.println(database.getStatuses());
+                        for(User user : database.getUsers())
+                        {
+                            System.out.println(user.getUid() + " " + user.getEmail() + " " + user.getName() + " " + user.getRole());
+                        }
                     }
 
                     @Override
