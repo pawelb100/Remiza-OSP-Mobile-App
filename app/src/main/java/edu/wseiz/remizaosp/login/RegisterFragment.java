@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentRegisterBinding;
+import edu.wseiz.remizaosp.tools.Database;
+import edu.wseiz.remizaosp.tools.DatabaseListener;
 
 public class RegisterFragment extends Fragment {
 
     private FragmentRegisterBinding binding;
-    private FirebaseAuth fAuth;
+    private Database database;
 
     private Boolean verifyInput(String name, String email, String pass) {
         if (!(name.isEmpty())) {
@@ -50,34 +53,13 @@ public class RegisterFragment extends Fragment {
 
     }
 
-    private Boolean registerUser(String name, String email, String pass) {
 
-        fAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
-            {
-                FirebaseUser user = fAuth.getCurrentUser();
-
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference().child("users").child(user.getUid());
-
-                ref.child("email").setValue(email);
-                ref.child("name").setValue(name);
-                ref.child("role").setValue("User");
-
-            }
-
-        });
-
-        return fAuth.getCurrentUser() != null;
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding =  FragmentRegisterBinding.inflate(inflater, container, false);
 
-        fAuth = FirebaseAuth.getInstance();
+        database = new Database();
 
         binding.signup.setOnClickListener(view -> {
 
@@ -87,16 +69,21 @@ public class RegisterFragment extends Fragment {
 
             if(verifyInput(name, email, pass))
             {
-                    if(registerUser(name, email, pass)) {
+                database.register(name, email, pass, new DatabaseListener() {
+                    @Override
+                    public void onSuccess() {
                         Toast.makeText(getActivity(), "Rejestracja udana", Toast.LENGTH_LONG).show();
                         Intent activityIntent = new Intent(getActivity(), MainActivity.class);
                         startActivity(activityIntent);
                         requireActivity().finish();
                     }
-                    else
-                    {
+
+                    @Override
+                    public void onFailed(Exception e) {
                         Toast.makeText(getActivity(), "Rejestracja nieudana", Toast.LENGTH_LONG).show();
                     }
+                });
+
             }
 
         });

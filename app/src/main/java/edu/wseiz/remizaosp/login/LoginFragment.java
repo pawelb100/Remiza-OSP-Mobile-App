@@ -16,11 +16,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.ActivityLoginBinding;
 import edu.wseiz.remizaosp.databinding.FragmentLoginBinding;
+import edu.wseiz.remizaosp.tools.Database;
+import edu.wseiz.remizaosp.tools.DatabaseListener;
 
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
-    private FirebaseAuth fAuth;
+    private Database database;
 
     private Boolean verifyInput(String email, String pass) {
         if(!(email.isEmpty())) {
@@ -45,7 +47,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
 
-        fAuth = FirebaseAuth.getInstance();
+        database = new Database();
 
         binding.signin.setOnClickListener(view -> {
 
@@ -54,19 +56,21 @@ public class LoginFragment extends Fragment {
 
             if(verifyInput(email, pass))
             {
-                    fAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
-                        if(task.isSuccessful())
-                        {
-                            Toast.makeText(getActivity(), "Logowanie udane", Toast.LENGTH_SHORT).show();
-                            Intent activityIntent = new Intent(getActivity(), MainActivity.class);
-                            startActivity(activityIntent);
-                            requireActivity().finish();
-                        }
-                        else
-                        {
-                            Toast.makeText(getActivity(), "Logowanie nieudane", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                database.login(email, pass, new DatabaseListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(getActivity(), "Logowanie udane", Toast.LENGTH_SHORT).show();
+                        Intent activityIntent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(activityIntent);
+                        requireActivity().finish();
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        Toast.makeText(getActivity(), "Logowanie nieudane", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
             }
 

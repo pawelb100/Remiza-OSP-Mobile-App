@@ -1,5 +1,8 @@
 package edu.wseiz.remizaosp.tools;
 
+import android.content.Intent;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,8 +16,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.models.User;
 
 public class Database {
@@ -27,6 +33,7 @@ public class Database {
 
     private List<String> statuses;
     private List<User> users;
+    private Map<String, Integer> userstatus;
 
     public Database()
     {
@@ -36,6 +43,8 @@ public class Database {
         user = fAuth.getCurrentUser();
         statuses = new ArrayList<>();
         users = new ArrayList<>();
+
+        userstatus = new HashMap<>();
     }
 
     public List<String> getStatuses()
@@ -48,6 +57,21 @@ public class Database {
         return users;
     }
 
+    public int getUserStatus(String userUid) {
+
+        for (Map.Entry<String, Integer> entry : userstatus.entrySet()) {
+            if (entry.getKey().equals(userUid)) {
+                return entry.getValue();
+            }
+        }
+        return -1;
+
+    }
+
+    public String getCurrentUserId()
+    {
+        return user.getUid();
+    }
 
     public void updateStatus(int StatusId, final DatabaseListener listener) {
         reference.child("userstatus").child(user.getUid()).setValue(StatusId).addOnCompleteListener(task -> {
@@ -58,11 +82,68 @@ public class Database {
         });
     }
 
+    public void fetchUserStatus (DatabaseListener listener)
+    {
+        reference.child("userstatus").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(snapshot.exists())
+                {
+                    userstatus.clear();
+
+                    for(DataSnapshot snapshotChild : snapshot.getChildren())
+                    {
+                        userstatus.put(snapshotChild.getKey(), snapshotChild.getValue(Integer.class));
+                    }
+                }
+
+                listener.onSuccess();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                listener.onFailed(error.toException());
+            }
+        });
+    }
+
+
+
+    public void login(String email, String pass, DatabaseListener listener) {
+        fAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+                listener.onSuccess();
+            else
+                listener.onFailed(task.getException());
+        });
+    }
+
+    public void register(String name, String email, String pass, DatabaseListener listener) {
+        fAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+            {
+                user = fAuth.getCurrentUser();
+
+                DatabaseReference ref = reference.child("users").child(user.getUid());
+
+                ref.child("email").setValue(email);
+                ref.child("name").setValue(name);
+                ref.child("role").setValue("User");
+
+                listener.onSuccess();
+            }
+            else
+                listener.onFailed(task.getException());
+
+        });
+    }
+
 
 
     public void fetchStatuses(final DatabaseListener listener) {
 
-        reference.child("statuses").addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child("status").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
