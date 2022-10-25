@@ -4,23 +4,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import edu.wseiz.remizaosp.tools.Database;
+import edu.wseiz.remizaosp.tools.Notifier;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth fAuth;
-
     private AppBarConfiguration appBarConfiguration;
+
+    private Database database = new Database();
+
+    public Database getDatabase() {
+        return database;
+    }
+
+    private Notifier notifier = new Notifier(this);
+
+    public Notifier getNotifier() {
+        return notifier;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +51,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-/*
-        fAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = fAuth.getCurrentUser();
-
-        if (user == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
-*/
     }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {

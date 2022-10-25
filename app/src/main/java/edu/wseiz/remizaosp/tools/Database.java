@@ -1,12 +1,7 @@
 package edu.wseiz.remizaosp.tools;
 
-import android.content.Intent;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.models.User;
 
 public class Database {
@@ -57,6 +51,22 @@ public class Database {
         return users;
     }
 
+    public String getCurrentUserId() {
+        return user.getUid();
+    }
+
+
+    public int getUserStatus() {
+
+        for (Map.Entry<String, Integer> entry : userstatus.entrySet()) {
+            if (entry.getKey().equals(user.getUid())) {
+                return entry.getValue();
+            }
+        }
+        return -1;
+
+    }
+
     public int getUserStatus(String userUid) {
 
         for (Map.Entry<String, Integer> entry : userstatus.entrySet()) {
@@ -68,11 +78,6 @@ public class Database {
 
     }
 
-    public String getCurrentUserId()
-    {
-        return user.getUid();
-    }
-
     public void updateStatus(int StatusId, final DatabaseListener listener) {
         reference.child("userstatus").child(user.getUid()).setValue(StatusId).addOnCompleteListener(task -> {
             if(task.isSuccessful())
@@ -82,22 +87,27 @@ public class Database {
         });
     }
 
-    public void fetchUserStatus (DatabaseListener listener)
+    public void updateStatus(int StatusId, String userUid, final DatabaseListener listener) {
+        reference.child("userstatus").child(user.getUid()).setValue(StatusId).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+                listener.onSuccess();
+            else
+                listener.onFailed(task.getException());
+        });
+    }
+
+
+
+    public void fetchUserStatuses (DatabaseListener listener)
     {
         reference.child("userstatus").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if(snapshot.exists())
-                {
+                if(snapshot.exists()) {
                     userstatus.clear();
-
                     for(DataSnapshot snapshotChild : snapshot.getChildren())
-                    {
                         userstatus.put(snapshotChild.getKey(), snapshotChild.getValue(Integer.class));
-                    }
                 }
-
                 listener.onSuccess();
             }
 
