@@ -129,6 +129,10 @@ public class Database {
         });
     }
 
+    public void logout() {
+        fAuth.signOut();
+    }
+
     public void register(String name, String email, String pass, DatabaseListener listener) {
         fAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
             if(task.isSuccessful())

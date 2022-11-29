@@ -1,6 +1,7 @@
 package edu.wseiz.remizaosp.tools;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,26 +13,26 @@ import java.util.List;
 
 public class Notifier {
 
-    private Activity activity;
+    private Context context;
 
-    public Notifier(Activity activity)
+    public Notifier(Context context)
     {
-        this.activity = activity;
+        this.context = context;
     }
 
     public void info(String message)
     {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     public void alert(String message)
     {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public void messageBox(String title, String message, String buttonOk)
     {
-        new AlertDialog.Builder(activity)
+        new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setNeutralButton(buttonOk, null)
@@ -40,7 +41,7 @@ public class Notifier {
 
     public void dialogBox(String title, String message, String buttonPositive, String buttonNegative, Boolean isCancellable, int icon, DialogInterface.OnClickListener actionPositive, DialogInterface.OnClickListener actionNegative)
     {
-        new AlertDialog.Builder(activity)
+        new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(buttonPositive, actionPositive)
@@ -65,7 +66,7 @@ public class Notifier {
 
     public void inputTextBox(String title, String message, String buttonPositive, String buttonNegative, Boolean isCancellable, int icon, EditText editText, DialogInterface.OnClickListener actionPositive, DialogInterface.OnClickListener actionNegative)
     {
-        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(title);
         alert.setMessage(message);
         alert.setPositiveButton(buttonPositive, actionPositive);
@@ -93,7 +94,7 @@ public class Notifier {
      */
 
     public void selectListItemDialog(String title, String[] array, DialogInterface.OnClickListener action ) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setItems(array, action);
         AlertDialog dialog = builder.create();

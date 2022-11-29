@@ -2,25 +2,32 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mynavgraph.xml"
+    android:id="@+id/main_navgraph.xml"
     app:startDestination="@id/dashboardFragment">
 
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="edu.wseiz.remizaosp.main.DashboardFragment"
-        android:label="Dashboard"
-        tools:layout="@layout/fragment_dashboard">
-        <action
-            android:id="@+id/action_dashboardFragment_to_firefighterListFragment2"
-            app:destination="@id/firefighterListFragment" />
-    </fragment>
+        android:label="Centrum"
+        tools:layout="@layout/fragment_dashboard" />
     <fragment
-        android:id="@+id/firefighterListFragment"
-        android:name="edu.wseiz.remizaosp.main.FirefighterListFragment"
-        android:label="Firefighter List"
-        tools:layout="@layout/fragment_firefighter_list">
-        <action
-            android:id="@+id/action_firefighterListFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
-    </fragment>
+        android:id="@+id/usersFragment"
+        android:name="edu.wseiz.remizaosp.main.UsersFragment"
+        android:label="Oddział"
+        tools:layout="@layout/fragment_users" />
+    <fragment
+        android:id="@+id/eventsFragment"
+        android:name="edu.wseiz.remizaosp.main.EventsFragment"
+        android:label="Zdarzenia"
+        tools:layout="@layout/fragment_events" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="edu.wseiz.remizaosp.main.ChatFragment"
+        android:label="Rozmowy"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="edu.wseiz.remizaosp.main.SettingsFragment"
+        android:label="Ustawienia"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

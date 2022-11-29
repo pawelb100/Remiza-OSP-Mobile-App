@@ -2,6 +2,7 @@ package edu.wseiz.remizaosp.main;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,30 +13,32 @@ import edu.wseiz.remizaosp.databinding.FragmentDashboardBinding;
 import edu.wseiz.remizaosp.tools.Database;
 import edu.wseiz.remizaosp.tools.DatabaseListener;
 import edu.wseiz.remizaosp.tools.Notifier;
+import edu.wseiz.remizaosp.viewmodels.Repository;
 
 public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
-    private Database database;
-    private Notifier notifier;
+    private Repository repository;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
 
-        notifier = ((MainActivity) requireActivity()).getNotifier();
-        database = ((MainActivity) requireActivity()).getDatabase();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
+        repository = viewModelProvider.get(Repository.class);
 
-        database.fetchStatuses(new DatabaseListener() {
+        Notifier notifier = new Notifier(getContext());
+
+        repository.getDatabase().fetchStatuses(new DatabaseListener() {
             @Override
             public void onSuccess() {
-                database.fetchUserStatuses(new DatabaseListener() {
+                repository.getDatabase().fetchUserStatuses(new DatabaseListener() {
                     @Override
                     public void onSuccess() {
-                        int statusId = database.getUserStatus();
+                        int statusId = repository.getDatabase().getUserStatus();
                         if (statusId != -1)
-                            binding.txtStatus.setText(database.getStatuses().get(statusId));
+                            binding.txtStatus.setText(repository.getDatabase().getStatuses().get(statusId));
                         else
                             binding.txtStatus.setText("Brak");
                     }
@@ -55,11 +58,11 @@ public class DashboardFragment extends Fragment {
 
 
         binding.btnChangeStatus.setOnClickListener(v -> {
-            notifier.selectListItemDialog("Wybierz status", database.getStatuses().toArray(new String[0]), (dialog, which) -> {
-                database.updateStatus(which, new DatabaseListener() {
+            notifier.selectListItemDialog("Wybierz status", repository.getDatabase().getStatuses().toArray(new String[0]), (dialog, which) -> {
+                repository.getDatabase().updateStatus(which, new DatabaseListener() {
                     @Override
                     public void onSuccess() {
-                        binding.txtStatus.setText(database.getStatuses().get(which));
+                        binding.txtStatus.setText(repository.getDatabase().getStatuses().get(which));
                     }
 
                     @Override

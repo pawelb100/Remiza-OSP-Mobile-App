@@ -3,30 +3,31 @@ package edu.wseiz.remizaosp.main;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.wseiz.remizaosp.MainActivity;
-import edu.wseiz.remizaosp.databinding.FragmentFirefighterListBinding;
+import edu.wseiz.remizaosp.databinding.FragmentUsersBinding;
 import edu.wseiz.remizaosp.tools.Database;
-import edu.wseiz.remizaosp.tools.DatabaseListener;
 import edu.wseiz.remizaosp.tools.Notifier;
+import edu.wseiz.remizaosp.viewmodels.Repository;
 
-public class FirefighterListFragment extends Fragment {
+public class UsersFragment extends Fragment {
 
 
-    private FragmentFirefighterListBinding binding;
-    private Notifier notifier;
-    private Database database;
+    private FragmentUsersBinding binding;
+
+    private Repository repository;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentFirefighterListBinding.inflate(inflater, container, false);
+        binding = FragmentUsersBinding.inflate(inflater, container, false);
 
-        notifier = ((MainActivity) requireActivity()).getNotifier();
-        database = ((MainActivity) requireActivity()).getDatabase();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
+        repository = viewModelProvider.get(Repository.class);
 
 
         return binding.getRoot();

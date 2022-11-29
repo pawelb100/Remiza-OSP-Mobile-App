@@ -7,15 +7,24 @@
 
         <item
             android:id="@+id/dashboardFragment"
-            android:title="Dashboard"/>
-
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Centrum"/>
         <item
-            android:id="@+id/firefighterListFragment"
-            android:title="List"/>
-
-
-
-
+            android:id="@+id/eventsFragment"
+            android:icon="@drawable/ic_baseline_announcement_24"
+            android:title="Zdarzenia"/>
+        <item
+            android:id="@+id/usersFragment"
+            android:icon="@drawable/ic_baseline_people_24"
+            android:title="Oddział"/>
+        <item
+            android:id="@+id/chatFragment"
+            android:icon="@drawable/ic_baseline_chat_24"
+            android:title="Rozmowy"/>
+        <item
+            android:id="@+id/settingsFragment"
+            android:icon="@drawable/ic_baseline_settings_24"
+            android:title="Ustawienia"/>
 
     </group>
 
