@@ -9,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentUsersBinding;
-import edu.wseiz.remizaosp.tools.Database;
-import edu.wseiz.remizaosp.tools.Notifier;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
 public class UsersFragment extends Fragment {

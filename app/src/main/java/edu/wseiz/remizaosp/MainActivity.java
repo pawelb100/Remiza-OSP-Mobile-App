@@ -1,33 +1,19 @@
 package edu.wseiz.remizaosp;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.os.Bundle;
-
 import edu.wseiz.remizaosp.databinding.ActivityMainBinding;
-import edu.wseiz.remizaosp.tools.Database;
-import edu.wseiz.remizaosp.tools.Notifier;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-
-    private Database database = new Database();
-
-    public Database getDatabase() {
-        return database;
-    }
-
-    private Notifier notifier = new Notifier(this);
-
-    public Notifier getNotifier() {
-        return notifier;
-    }
 
     private ActivityMainBinding binding;
 

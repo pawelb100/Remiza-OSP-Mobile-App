@@ -14,15 +14,54 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.wseiz.remizaosp.MainActivity;
-import edu.wseiz.remizaosp.databinding.ActivityLoginBinding;
 import edu.wseiz.remizaosp.databinding.FragmentLoginBinding;
-import edu.wseiz.remizaosp.tools.Database;
-import edu.wseiz.remizaosp.tools.DatabaseListener;
 
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
-    private Database database;
+
+    private FirebaseAuth auth;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+
+        auth = FirebaseAuth.getInstance();
+
+        binding.signin.setOnClickListener(view -> {
+
+            String email = binding.emailbox.getText().toString();
+            String pass = binding.passwordbox.getText().toString();
+
+            if(verifyInput(email, pass))
+            {
+                auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+                    if(task.isSuccessful())
+                    {
+                        Toast.makeText(getActivity(), "Logowanie udane", Toast.LENGTH_SHORT).show();
+                        Intent activityIntent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(activityIntent);
+                        requireActivity().finish();
+                    }
+                    else
+                        Toast.makeText(getActivity(), "Logowanie nieudane", Toast.LENGTH_SHORT).show();
+
+                });
+            }
+        });
+
+        binding.gotoRegister.setOnClickListener(view -> {
+            Navigation.findNavController(view).popBackStack();
+
+        });
+
+        return binding.getRoot();
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
     private Boolean verifyInput(String email, String pass) {
         if(!(email.isEmpty())) {
@@ -40,54 +79,5 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getActivity(), "Wprowadź adres e-mail", Toast.LENGTH_SHORT).show();
             return false;
         }
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentLoginBinding.inflate(inflater, container, false);
-
-        database = new Database();
-
-        binding.signin.setOnClickListener(view -> {
-
-            String email = binding.emailbox.getText().toString();
-            String pass = binding.passwordbox.getText().toString();
-
-            if(verifyInput(email, pass))
-            {
-                database.login(email, pass, new DatabaseListener() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(getActivity(), "Logowanie udane", Toast.LENGTH_SHORT).show();
-                        Intent activityIntent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(activityIntent);
-                        requireActivity().finish();
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-                        Toast.makeText(getActivity(), "Logowanie nieudane", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-            }
-
-        });
-
-        binding.gotoRegister.setOnClickListener(view -> {
-            Navigation.findNavController(view).popBackStack();
-
-        });
-
-
-
-        return binding.getRoot();
-    }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }
