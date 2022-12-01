@@ -2,23 +2,23 @@ package edu.wseiz.remizaosp.models;
 
 public class Status {
 
-    private String id;
+    private String uid;
     private String title;
 
     public Status() {
     }
 
     public Status(String id, String title) {
-        this.id = id;
+        this.uid = id;
         this.title = title;
     }
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getTitle() {

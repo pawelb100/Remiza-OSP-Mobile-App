@@ -5,7 +5,7 @@
     android:id="@+id/DrawerLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white">
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,9 +22,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/topAppBar"
                 app:title="Remiza OSP"
-                app:titleTextColor="@color/black"
+                app:titleTextColor="@color/text"
                 app:navigationIcon="@drawable/ic_baseline_menu_24"
-                android:background="@color/primary"/>
+                android:background="@color/action"/>
 
 
 

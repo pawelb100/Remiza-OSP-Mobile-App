@@ -55,7 +55,7 @@ public class StatusListAdapter extends RecyclerView.Adapter<StatusListAdapter.Vi
 
         viewHolder.tvStatusName.setText(currentItem.getTitle());
 
-        if (currentItem.getId().equals(currentStatusId))
+        if (currentItem.getUid().equals(currentStatusId))
             viewHolder.tvIsCurrent.setText("Aktualny");
 
         viewHolder.parentView.setOnClickListener(v -> {

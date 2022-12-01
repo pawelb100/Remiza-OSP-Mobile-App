@@ -19,7 +19,7 @@
             android:layout_alignParentEnd="true"
 
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/text"
             android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView

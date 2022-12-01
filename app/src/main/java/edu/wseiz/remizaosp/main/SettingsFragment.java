@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.wseiz.remizaosp.LoginActivity;
-import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentSettingsBinding;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
@@ -30,7 +29,7 @@ public class SettingsFragment extends Fragment {
         repository = viewModelProvider.get(Repository.class);
 
         binding.signout.setOnClickListener(v -> {
-            repository.signout();
+            repository.signOut();
             Intent activityIntent = new Intent(getActivity(), LoginActivity.class);
             startActivity(activityIntent);
             requireActivity().finish();

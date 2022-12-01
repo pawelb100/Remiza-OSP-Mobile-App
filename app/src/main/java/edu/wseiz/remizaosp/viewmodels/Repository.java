@@ -15,13 +15,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wseiz.remizaosp.listeners.FetchAvailabilityListener;
-import edu.wseiz.remizaosp.listeners.FetchCurrentUserAvailabilityListener;
+import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
-import edu.wseiz.remizaosp.listeners.FetchStatusListener;
+import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
 import edu.wseiz.remizaosp.listeners.FetchUsersListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
-import edu.wseiz.remizaosp.models.Availability;
 import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
 
@@ -39,7 +37,7 @@ public class Repository extends AndroidViewModel {
 
     public void updateStatus(String StatusId, UpdateListener listener) {
         if (auth.getUid()!=null) {
-            database.getReference().child("availability").child(auth.getUid()).setValue(StatusId).addOnCompleteListener(task -> {
+            database.getReference().child("users").child(auth.getUid()).child("statusId").setValue(StatusId).addOnCompleteListener(task -> {
                 if(task.isSuccessful())
                     listener.onSuccess();
                 else
@@ -48,54 +46,31 @@ public class Repository extends AndroidViewModel {
         }
     }
 
-    public void fetchStatus(Availability availability, FetchStatusListener listener) {
+    public void updateUser(User user, UpdateListener listener) {
 
-        database.getReference().child("availability").child(availability.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if (snapshot.exists())
-                {
-                    String statusId = snapshot.getValue(String.class);
-
-                    database.getReference().child("status").child(statusId).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                            Status status = null;
-                            if (snapshot.exists())
-                                status = new Status(statusId, snapshot.getValue(String.class));
-
-                            listener.onSuccess(status);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            listener.onFailed();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        database.getReference().child("users").child(user.getUid()).setValue(user).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+                listener.onSuccess();
+            else
                 listener.onFailed();
-            }
         });
+
+
+
     }
 
-    public void fetchCurrentUserAvailability(FetchCurrentUserAvailabilityListener listener) {
+    public void fetchUserStatusId(FetchUserStatusIdListener listener) {
+
         if (auth.getUid()!=null) {
-            database.getReference().child("availability").child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            database.getReference().child("users").child(auth.getUid()).child("statusId").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    Availability availability;
-                    if(snapshot.exists())
-                        availability = new Availability(snapshot.getKey(), snapshot.getValue(String.class));
+                    if (snapshot.exists()) {
+                        String statusId = snapshot.getValue(String.class);
+                        listener.onSuccess(statusId);
+                    }
                     else
-                        availability = null;
-                    listener.onSuccess(availability);
+                        listener.onNoData();
                 }
 
                 @Override
@@ -104,8 +79,28 @@ public class Repository extends AndroidViewModel {
                 }
             });
         }
+
     }
 
+    public void fetchStatusById(String statusId, FetchStatusByIdListener listener) {
+
+        database.getReference().child("status").child(statusId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Status status = snapshot.getValue(Status.class);
+                    listener.onSuccess(status);
+                }
+                else
+                    listener.onNoData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                listener.onFailed();
+            }
+        });
+    }
 
     public void fetchStatusList(FetchStatusListListener listener) {
 
@@ -117,9 +112,7 @@ public class Repository extends AndroidViewModel {
 
                 if(snapshot.exists())
                     for(DataSnapshot child : snapshot.getChildren()) {
-                        Status status = new Status();
-                        status.setId(child.getKey());
-                        status.setTitle(child.getValue(String.class));
+                        Status status = child.getValue(Status.class);
                         statuses.add(status);
                     }
 
@@ -142,12 +135,8 @@ public class Repository extends AndroidViewModel {
                 List<User> users = new ArrayList<>();
 
                 if(snapshot.exists())
-                    for(DataSnapshot dsUser : snapshot.getChildren()) {
-                        User user = new User();
-                        user.setUid(dsUser.getKey());
-                        user.setName(dsUser.child("name").getValue(String.class));
-                        user.setEmail(dsUser.child("email").getValue(String.class));
-                        user.setRole(dsUser.child("role").getValue(String.class));
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        User user = dataSnapshot.getValue(User.class);
                         users.add(user);
                     }
 
@@ -161,43 +150,23 @@ public class Repository extends AndroidViewModel {
         });
     }
 
-    public void fetchAvailability(FetchAvailabilityListener listener) {
-        database.getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                List<Availability> availabilities = new ArrayList<>();
-
-                if(snapshot.exists())
-                    for(DataSnapshot child : snapshot.getChildren())
-                        availabilities.add(new Availability(child.getKey(), child.getValue(String.class)));
-
-                listener.onSuccess(availabilities);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                listener.onFailed();
-            }
-        });
-    }
-
-    public void signout() {
+    public void signOut() {
         auth.signOut();
     }
 
-//    public void setStatusList() {
-//
-//        DatabaseReference ref = database.getReference();
-//
-//        ref.child("status").push().setValue("W drodze do remizy");
-//        ref.child("status").push().setValue("Dojazd na miejsce");
-//        ref.child("status").push().setValue("W straży");
-//        ref.child("status").push().setValue("W gotowości");
-//        ref.child("status").push().setValue("Na telefon");
-//        ref.child("status").push().setValue("W razie potrzeby dojadę");
-//        ref.child("status").push().setValue("Brak dostępności");
-//    }
+    public void setDefaultStatusList() {
+
+        DatabaseReference ref = database.getReference().child("status");
+
+        String[] str = {"W drodze do remizy", "Dojazd na miejsce","W straży", "W gotowości", "Na telefon", "W razie potrzeby dojadę", "Brak dostępności"};
+
+        for (int i=0; i<str.length; ++i) {
+            String key = ref.push().getKey();
+            Status status = new Status(key, str[i]);
+            ref.child(key).setValue(status);
+        }
+    }
 
 
 

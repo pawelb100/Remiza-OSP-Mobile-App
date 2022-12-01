@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentRegisterBinding;
+import edu.wseiz.remizaosp.models.Status;
+import edu.wseiz.remizaosp.models.User;
 
 public class RegisterFragment extends Fragment {
 
@@ -44,9 +46,14 @@ public class RegisterFragment extends Fragment {
                     {
                         DatabaseReference ref = database.getReference().child("users").child(auth.getCurrentUser().getUid());
 
-                        ref.child("email").setValue(email);
-                        ref.child("name").setValue(name);
-                        ref.child("role").setValue("User");
+                        String key = ref.push().getKey();
+                        User user = new User();
+                        user.setUid(auth.getUid());
+                        user.setEmail(email);
+                        user.setName(name);
+                        user.setRole("user");
+
+                        ref.setValue(user);
 
                         Toast.makeText(getActivity(), "Rejestracja udana", Toast.LENGTH_LONG).show();
                         Intent activityIntent = new Intent(getActivity(), MainActivity.class);

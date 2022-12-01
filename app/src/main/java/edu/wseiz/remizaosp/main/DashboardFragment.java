@@ -14,12 +14,12 @@ import java.util.List;
 import edu.wseiz.remizaosp.databinding.FragmentDashboardBinding;
 import edu.wseiz.remizaosp.dialogs.DialogStatusSelect;
 import edu.wseiz.remizaosp.interfaces.OnItemListClick;
-import edu.wseiz.remizaosp.listeners.FetchCurrentUserAvailabilityListener;
+import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
-import edu.wseiz.remizaosp.listeners.FetchStatusListener;
+import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
-import edu.wseiz.remizaosp.models.Availability;
 import edu.wseiz.remizaosp.models.Status;
+import edu.wseiz.remizaosp.models.User;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
 public class DashboardFragment extends Fragment {
@@ -46,7 +46,7 @@ public class DashboardFragment extends Fragment {
 
             String statusId;
             if (currentStatus!=null)
-                statusId = currentStatus.getId();
+                statusId = currentStatus.getUid();
             else
                 statusId = "";
 
@@ -54,7 +54,7 @@ public class DashboardFragment extends Fragment {
                 @Override
                 public void onItemClick(Object item) {
                     Status status = (Status) item;
-                    repository.updateStatus(status.getId(), new UpdateListener() {
+                    repository.updateStatus(status.getUid(), new UpdateListener() {
                         @Override
                         public void onSuccess() {
                             currentStatus = status;
@@ -90,32 +90,31 @@ public class DashboardFragment extends Fragment {
 
     private void loadData() {
 
-        repository.fetchCurrentUserAvailability(new FetchCurrentUserAvailabilityListener() {
+        repository.fetchUserStatusId(new FetchUserStatusIdListener() {
             @Override
-            public void onSuccess(Availability availability) {
+            public void onSuccess(String statusId) {
+                repository.fetchStatusById(statusId, new FetchStatusByIdListener() {
+                    @Override
+                    public void onSuccess(Status status) {
+                        currentStatus = status;
+                        binding.txtStatus.setText(status.getTitle());
+                    }
 
-                if (availability!=null) {
-                    repository.fetchStatus(availability, new FetchStatusListener() {
-                        @Override
-                        public void onSuccess(Status status) {
-                            currentStatus = status;
-                            if (status != null)
-                                binding.txtStatus.setText(status.getTitle());
-                            else
-                                binding.txtStatus.setText("Błąd");
+                    @Override
+                    public void onNoData() {
+                        currentStatus = null;
+                        binding.txtStatus.setText("Nieznany status");
+                    }
 
-                        }
+                    @Override
+                    public void onFailed() {handleFail();}
+                });
+            }
 
-                        @Override
-                        public void onFailed() {handleFail();}
-                    });
-                }
-                else
-                {
-                    currentStatus = null;
-                    binding.txtStatus.setText("Nie wybrano");
-                }
-
+            @Override
+            public void onNoData() {
+                currentStatus = null;
+                binding.txtStatus.setText("Nie wybrano");
             }
 
             @Override
@@ -136,7 +135,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void handleFail() {
-        Toast.makeText(getContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Wystąpił problem z połączeniem", Toast.LENGTH_LONG).show();
     }
 
 }
