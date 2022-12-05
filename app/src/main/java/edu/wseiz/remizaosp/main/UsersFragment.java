@@ -33,7 +33,7 @@ public class UsersFragment extends Fragment {
 
     private List<Status> statuses;
 
-    private List<Pair<String, List<String>>> statusTitlesWithUserNames;
+    private List<Pair<String, List<User>>> statusTitlesWithUsers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class UsersFragment extends Fragment {
         ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
         repository = viewModelProvider.get(Repository.class);
 
-        statusTitlesWithUserNames = new ArrayList<>();
+        statusTitlesWithUsers = new ArrayList<>();
 
         loadData();
 
@@ -66,7 +66,7 @@ public class UsersFragment extends Fragment {
                     @Override
                     public void onSuccess(List<User> data) {
 
-                        statusTitlesWithUserNames = prepareListToDisplay(statuses, data);
+                        statusTitlesWithUsers = prepareListToDisplay(statuses, data);
 
                         if(adapter!=null)
                             adapter.notifyDataSetChanged();
@@ -90,28 +90,28 @@ public class UsersFragment extends Fragment {
 
     }
 
-    private List<Pair<String, List<String>>> prepareListToDisplay(List<Status> statuses, List<User> users) {
+    private List<Pair<String, List<User>>> prepareListToDisplay(List<Status> statuses, List<User> users) {
 
-        List<Pair<String, List<String>>> statuesWithUsers = new ArrayList<>();
+        List<Pair<String, List<User>>> statuesWithUsers = new ArrayList<>();
 
         for(Status status : statuses)
         {
 
             String title = status.getTitle();
-            List<String> userNames = new ArrayList<>();
+            List<User> userList = new ArrayList<>();
 
             for(User user : users)
             {
                 if (user.getStatusId()!=null)
                     if(user.getStatusId().equals(status.getUid()))
                     {
-                        userNames.add(user.getName());
+                        userList.add(user);
                     }
 
             }
 
-            if(!(userNames.isEmpty())) {
-                Pair<String, List<String>> usersInStatus = new Pair<>(title, userNames);
+            if(!(userList.isEmpty())) {
+                Pair<String, List<User>> usersInStatus = new Pair<>(title, userList);
                 statuesWithUsers.add(usersInStatus);
             }
 
@@ -122,7 +122,7 @@ public class UsersFragment extends Fragment {
 
 
     private void setAdapter() {
-        adapter = new StatusWithUsersListAdapter(getContext(), statusTitlesWithUserNames);
+        adapter = new StatusWithUsersListAdapter(getContext(), statusTitlesWithUsers);
         binding.rvStatusesWithUsers.setAdapter(adapter);
         binding.rvStatusesWithUsers.setLayoutManager(new LinearLayoutManager(getContext()));
     }

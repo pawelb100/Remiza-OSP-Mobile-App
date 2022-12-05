@@ -16,20 +16,21 @@ import java.util.List;
 
 import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.models.Status;
+import edu.wseiz.remizaosp.models.User;
 
 public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithUsersListAdapter.ViewHolder>  {
 
     private final Context context;
-    private final List<Pair<String, List<String>>> statusTitlesWithUserNames;
+    private final List<Pair<String, List<User>>> statusTitlesWithUsers;
 
-    public StatusWithUsersListAdapter(Context context, List<Pair<String, List<String>>> statusTitlesWithUserNames) {
+    public StatusWithUsersListAdapter(Context context, List<Pair<String, List<User>>> statusTitlesWithUsers) {
         this.context = context;
-        this.statusTitlesWithUserNames = statusTitlesWithUserNames;
+        this.statusTitlesWithUsers= statusTitlesWithUsers;
     }
 
     @Override
     public int getItemCount() {
-        return this.statusTitlesWithUserNames.size();
+        return this.statusTitlesWithUsers.size();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithU
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        Pair<String, List<String>> currentItem = statusTitlesWithUserNames.get(position);
+        Pair<String, List<User>> currentItem = statusTitlesWithUsers.get(position);
 
         viewHolder.tvStatusName.setText(currentItem.first);
 

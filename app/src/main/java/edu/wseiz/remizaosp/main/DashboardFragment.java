@@ -1,6 +1,7 @@
 package edu.wseiz.remizaosp.main;
 
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,13 @@ import java.util.List;
 import edu.wseiz.remizaosp.databinding.FragmentDashboardBinding;
 import edu.wseiz.remizaosp.dialogs.DialogStatusSelect;
 import edu.wseiz.remizaosp.interfaces.OnItemListClick;
+import edu.wseiz.remizaosp.listeners.FetchEventListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
 import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
+import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Status;
-import edu.wseiz.remizaosp.models.User;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
 public class DashboardFragment extends Fragment {
@@ -31,12 +33,16 @@ public class DashboardFragment extends Fragment {
     private Status currentStatus;
     private List<Status> statuses;
 
+    private Event lastEvent;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
 
         ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
         repository = viewModelProvider.get(Repository.class);
+
+        lastEvent = new Event();
 
         loadData();
 
@@ -76,6 +82,31 @@ public class DashboardFragment extends Fragment {
 
 
         binding.btnAcceptEventParticipation.setOnClickListener(v -> {
+            repository.updateParticipation(lastEvent, true, new UpdateListener() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+            });
+        });
+
+        binding.btnDeclineEventParticipation.setOnClickListener(v -> {
+            repository.updateParticipation(lastEvent, false, new UpdateListener() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+            });
         });
 
 
@@ -121,11 +152,26 @@ public class DashboardFragment extends Fragment {
             public void onFailed() {handleFail();}
         });
 
-
         repository.fetchStatusList(new FetchStatusListListener() {
             @Override
             public void onSuccess(List<Status> data) {
                 statuses = data;
+            }
+
+            @Override
+            public void onFailed() {handleFail();}
+        });
+
+        repository.fetchLastEvent(new FetchEventListener() {
+            @Override
+            public void onSuccess(Event event) {
+                setEvent(event);
+            }
+
+            @Override
+            public void onNoData() {
+                binding.eventCard.setVisibility(View.GONE);
+                binding.participationCard.setVisibility(View.GONE);
             }
 
             @Override
@@ -137,6 +183,17 @@ public class DashboardFragment extends Fragment {
     private void handleFail() {
         Toast.makeText(getContext(), "Wystąpił problem z połączeniem", Toast.LENGTH_LONG).show();
     }
+
+    private void setEvent(Event event) {
+        binding.tvEventTitle.setText(event.getTitle());
+        binding.tvEventStreet.setText(event.getAddress().getStreet());
+        binding.tvEventRegion.setText(event.getAddress().getRegion());
+        CharSequence charSequence = DateUtils.getRelativeTimeSpanString(event.getTimestamp(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
+        binding.tvEventTime.setText(charSequence.toString());
+        lastEvent = event;
+    }
+
+
 
 }
 

@@ -4,12 +4,12 @@ public class User {
     private String uid;
     private String name;
     private String email;
-    private String role;
+    private Role role;
     private String statusId;
 
     public User() {}
 
-    public User(String uid, String name, String email, String role, String statusId) {
+    public User(String uid, String name, String email, Role role, String statusId) {
         this.uid = uid;
         this.name = name;
         this.email = email;
@@ -26,7 +26,7 @@ public class User {
         return email;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -38,7 +38,7 @@ public class User {
         this.email = email;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

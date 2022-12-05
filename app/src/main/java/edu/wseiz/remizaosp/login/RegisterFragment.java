@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import edu.wseiz.remizaosp.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentRegisterBinding;
+import edu.wseiz.remizaosp.models.Role;
 import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
 
@@ -51,7 +52,7 @@ public class RegisterFragment extends Fragment {
                         user.setUid(auth.getUid());
                         user.setEmail(email);
                         user.setName(name);
-                        user.setRole("user");
+                        user.setRole(Role.Rescuer);
 
                         ref.setValue(user);
 

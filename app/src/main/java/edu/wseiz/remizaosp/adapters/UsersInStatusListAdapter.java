@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,21 +15,22 @@ import java.util.List;
 import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.interfaces.OnItemListClick;
 import edu.wseiz.remizaosp.models.Status;
+import edu.wseiz.remizaosp.models.User;
 
 public class UsersInStatusListAdapter extends RecyclerView.Adapter<UsersInStatusListAdapter.ViewHolder>  {
 
     private final Context context;
-    private final List<String> userNames;
+    private final List<User> users;
 
 
-    public UsersInStatusListAdapter(Context context, List<String> userNames) {
+    public UsersInStatusListAdapter(Context context, List<User> users) {
         this.context = context;
-        this.userNames = userNames;
+        this.users = users;
     }
 
     @Override
     public int getItemCount() {
-        return this.userNames.size();
+        return this.users.size();
     }
 
     @Override
@@ -48,17 +50,33 @@ public class UsersInStatusListAdapter extends RecyclerView.Adapter<UsersInStatus
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        String currentItem = userNames.get(position);
-        viewHolder.tvUserName.setText(currentItem);
+        User currentItem = users.get(position);
+        viewHolder.tvUserName.setText(currentItem.getName());
+
+        switch (currentItem.getRole()) {
+            case Rescuer:
+                viewHolder.ivIcon.setImageResource(R.drawable.ic_baseline_person_24);
+                break;
+            case Driver:
+                viewHolder.ivIcon.setImageResource(R.drawable.ic_baseline_drive_eta_24);
+                break;
+            case Officer:
+                viewHolder.ivIcon.setImageResource(R.drawable.ic_baseline_star_24);
+                break;
+            default:
+
+        }
 
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvUserName;
+        private final ImageView ivIcon;
 
         public ViewHolder(@NonNull View view) {
             super(view);
+            this.ivIcon = view.findViewById(R.id.ivIcon);
             this.tvUserName = view.findViewById(R.id.tvUserName);
         }
 
