@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
@@ -18,11 +19,12 @@ import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.interfaces.OnItemListClick;
 import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Participation;
+import edu.wseiz.remizaosp.utils.EventsDiffUtilCallback;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder>  {
 
     private final Context context;
-    private final List<Event> eventList;
+    private List<Event> eventList;
     private final OnItemListClick listener;
     private final DateFormat dateFormat;
 
@@ -30,7 +32,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         this.context = context;
         this.eventList = eventList;
         this.listener = listener;
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        this.dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm");
     }
 
     @Override
@@ -79,6 +81,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             listener.onItemLongClick(currentItem, v);
             return true;
         });
+    }
+
+    public void updateData(List<Event> events) {
+
+        EventsDiffUtilCallback diffUtilCallback = new EventsDiffUtilCallback(eventList, events);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallback);
+
+        eventList = events;
+        diffResult.dispatchUpdatesTo(this);
     }
 
 

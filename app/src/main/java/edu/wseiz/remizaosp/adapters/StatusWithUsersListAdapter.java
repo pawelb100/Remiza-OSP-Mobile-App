@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,13 +16,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.wseiz.remizaosp.R;
+import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
+import edu.wseiz.remizaosp.utils.EventsDiffUtilCallback;
+import edu.wseiz.remizaosp.utils.StatusWithUsersDiffUtilCallback;
 
 public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithUsersListAdapter.ViewHolder>  {
 
     private final Context context;
-    private final List<Pair<String, List<User>>> statusTitlesWithUsers;
+    private List<Pair<String, List<User>>> statusTitlesWithUsers;
 
     public StatusWithUsersListAdapter(Context context, List<Pair<String, List<User>>> statusTitlesWithUsers) {
         this.context = context;
@@ -47,6 +51,16 @@ public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithU
         );
     }
 
+    public void updateData(List<Pair<String, List<User>>> list) {
+
+        StatusWithUsersDiffUtilCallback diffUtilCallback = new StatusWithUsersDiffUtilCallback(statusTitlesWithUsers, list);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallback);
+
+        statusTitlesWithUsers = list;
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
@@ -54,14 +68,20 @@ public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithU
 
         viewHolder.tvStatusName.setText(currentItem.first);
 
-        viewHolder.rvStatusesWithUsers.setAdapter(new UsersInStatusListAdapter(context, currentItem.second));
-        viewHolder.rvStatusesWithUsers.setLayoutManager(new LinearLayoutManager(context));
+        if (viewHolder.adapter==null) {
+            viewHolder.adapter = new UsersInStatusListAdapter(context, currentItem.second);
+            viewHolder.rvStatusesWithUsers.setAdapter(viewHolder.adapter);
+            viewHolder.rvStatusesWithUsers.setLayoutManager(new LinearLayoutManager(context));
+        }
+        else
+            viewHolder.adapter.updateData(currentItem.second);
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvStatusName;
         private final RecyclerView rvStatusesWithUsers;
+        private UsersInStatusListAdapter adapter = null;
 
         public ViewHolder(@NonNull View view) {
             super(view);

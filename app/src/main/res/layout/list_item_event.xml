@@ -12,18 +12,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/ivWarningIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_warning_amber_24"
+
+            android:padding="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            />
+
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
 
             android:text="Pożar"
 
+            android:layout_toEndOf="@id/ivWarningIcon"
             android:textColor="@color/text"
-            android:textSize="21sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvStreet"
@@ -33,12 +46,12 @@
             android:layout_below="@id/tvTitle"
             android:layout_marginStart="20dp"
 
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
 
             android:layout_marginEnd="20dp"
             android:text="Rejtana 16"
             android:textColor="@color/text"
-            android:textSize="21sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvRegion"
@@ -48,7 +61,7 @@
             android:layout_below="@id/tvStreet"
             android:layout_marginStart="20dp"
 
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
 
             android:layout_marginEnd="20dp"
             android:text="Mokotów"
@@ -63,12 +76,12 @@
             android:layout_below="@id/tvRegion"
             android:layout_marginStart="20dp"
 
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
 
             android:layout_marginEnd="20dp"
             android:text="4 godziny temu"
             android:textColor="@color/strong_light_text"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
 
         <ImageView
@@ -76,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvRegion"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
 
             android:layout_marginEnd="15dp"
             android:layout_toStartOf="@id/tvParticipantCount"
@@ -90,12 +103,12 @@
             android:layout_below="@id/tvRegion"
 
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:text="15"
 
             android:textColor="@color/text"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
 
 
         <Space

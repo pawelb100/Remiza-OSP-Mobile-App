@@ -54,23 +54,30 @@ public class EventsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        repository.removeEventsListener();
         binding = null;
     }
 
 
     private void setAdapter() {
-        adapter = new EventListAdapter(getContext(), events, new OnItemListClick() {
-            @Override
-            public void onItemClick(Object item) {
 
-            }
+        if (adapter == null) {
+            adapter = new EventListAdapter(getContext(), events, new OnItemListClick() {
+                @Override
+                public void onItemClick(Object item) {
 
-            @Override
-            public void onItemLongClick(Object item, View view) {
+                }
 
-            }
-        });
-        binding.rvEvents.setAdapter(adapter);
-        binding.rvEvents.setLayoutManager(new LinearLayoutManager(getContext()));
+                @Override
+                public void onItemLongClick(Object item, View view) {
+
+                }
+            });
+            binding.rvEvents.setAdapter(adapter);
+            binding.rvEvents.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+        else
+            adapter.updateData(events);
+
     }
 }

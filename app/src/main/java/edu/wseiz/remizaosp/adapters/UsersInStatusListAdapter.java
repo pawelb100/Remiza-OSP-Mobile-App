@@ -8,19 +8,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.interfaces.OnItemListClick;
+import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
+import edu.wseiz.remizaosp.utils.EventsDiffUtilCallback;
+import edu.wseiz.remizaosp.utils.UsersInStatusDiffUtilCallback;
 
 public class UsersInStatusListAdapter extends RecyclerView.Adapter<UsersInStatusListAdapter.ViewHolder>  {
 
     private final Context context;
-    private final List<User> users;
+    private List<User> users;
 
 
     public UsersInStatusListAdapter(Context context, List<User> users) {
@@ -45,6 +49,15 @@ public class UsersInStatusListAdapter extends RecyclerView.Adapter<UsersInStatus
                         .from(context)
                         .inflate(R.layout.list_item_users_in_status, parent, false)
         );
+    }
+
+    public void updateData(List<User> list) {
+
+        UsersInStatusDiffUtilCallback diffUtilCallback = new UsersInStatusDiffUtilCallback(users, list);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallback);
+
+        users = list;
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @Override

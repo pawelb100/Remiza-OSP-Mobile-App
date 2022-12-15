@@ -8,6 +8,7 @@ public class Event {
 
     private String title;
     private String description;
+    private boolean ongoing;
 
     private Address address;
     private long timestamp;
@@ -20,6 +21,7 @@ public class Event {
         this.uid = uid;
         this.title = title;
         this.description = description;
+        this.ongoing = true;
         this.address = address;
         this.timestamp = timestamp;
         this.participationList = participationList;
@@ -47,6 +49,14 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isOngoing() {
+        return ongoing;
+    }
+
+    public void setOngoing(boolean ongoing) {
+        this.ongoing = ongoing;
     }
 
     public Address getAddress() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,20 +8,17 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/status_card"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
 
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -31,11 +28,10 @@
                 android:layout_height="wrap_content"
 
                 android:text="Twój aktualny status:"
-                android:textSize="25sp"
+                android:textSize="20sp"
+                android:textColor="@color/text"
 
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="16dp"/>
 
             <TextView
@@ -44,12 +40,11 @@
                 android:layout_height="wrap_content"
 
 
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
 
-                app:layout_constraintTop_toBottomOf="@id/txt1"
+                android:layout_below="@id/txt1"
                 android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
                 />
 
@@ -58,116 +53,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-
                 android:text="Zmień status"
 
-                app:layout_constraintTop_toBottomOf="@+id/txt_status"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="16dp"
-                />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="8dp"
-
-                app:layout_constraintTop_toBottomOf="@id/btn_changeStatus"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/event_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:cardCornerRadius="15dp"
-        app:cardElevation="5dp"
-
-        app:layout_constraintTop_toBottomOf="@id/status_card"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tvEventTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Pożar"
-                android:textSize="25sp"
-
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"/>
-
-            <TextView
-                android:id="@+id/tvEventStreet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Rejtana 16"
-                android:textSize="23sp"
-
-                android:layout_below="@id/tvEventTitle"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                />
-
-            <TextView
-                android:id="@+id/tvEventRegion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Mokotów"
-                android:textSize="23sp"
-
-                android:layout_below="@id/tvEventStreet"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="16dp"
-                />
-
-            <TextView
-                android:id="@+id/tvEventTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="16 godzin temu"
-                android:textSize="16sp"
-
-                android:layout_alignBottom="@id/btn_eventMap"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="16dp"
-                />
-
-            <ImageButton
-                android:id="@+id/btn_eventMap"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-
-                android:background="@drawable/ic_outline_map_24"
-
-                android:layout_below="@id/tvEventRegion"
+                android:textSize="12sp"
+                android:layout_below="@id/txt_status"
                 android:layout_alignParentEnd="true"
-
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 />
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="8dp"
-                android:layout_below="@id/btn_eventMap"
+                android:layout_below="@id/btn_changeStatus"
                 />
 
         </RelativeLayout>
@@ -175,79 +73,67 @@
 
     </androidx.cardview.widget.CardView>
 
+
     <androidx.cardview.widget.CardView
-        android:id="@+id/participation_card"
-        android:layout_width="0dp"
+        android:id="@+id/event_card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
 
-        app:layout_constraintTop_toBottomOf="@id/event_card"
+        android:layout_below="@id/status_card"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/txt3"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvCurrentEvents"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Aktualne zdarzenia:"
+                android:textColor="@color/text"
+                android:textSize="20sp"
 
-                android:text="Uczestnictwo:"
-                android:textSize="25sp"
-
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="16dp"/>
 
             <Button
-                android:id="@+id/btn_acceptEventParticipation"
+                android:id="@+id/btn_addEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Dodaj zdarzenie"
+                android:textSize="12sp"
 
-                android:text="Wezmę udział"
-
-                app:layout_constraintTop_toBottomOf="@id/txt3"
+                android:layout_below="@id/tvCurrentEvents"
                 android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
-
-                />
-
-            <Button
-                android:id="@+id/btn_declineEventParticipation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Nie mogę wziąć udziału"
-
-                app:layout_constraintTop_toBottomOf="@id/btn_acceptEventParticipation"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
-
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
                 />
 
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="8dp"
-
-                app:layout_constraintTop_toBottomOf="@id/btn_declineEventParticipation"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_below="@id/btn_addEvent"
                 />
 
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/event_card"
+
+        />
+
+
+
+</RelativeLayout>

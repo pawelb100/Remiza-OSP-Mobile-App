@@ -29,8 +29,9 @@ public class SettingsFragment extends Fragment {
         repository = viewModelProvider.get(Repository.class);
 
         binding.signout.setOnClickListener(v -> {
-            repository.signOut();
             Intent activityIntent = new Intent(getActivity(), LoginActivity.class);
+            getActivity().getViewModelStore().clear();
+            repository.signOut();
             startActivity(activityIntent);
             requireActivity().finish();
         });

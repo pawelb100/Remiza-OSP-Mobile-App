@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -16,6 +17,7 @@ public class StartActivity extends AppCompatActivity {
 
         Intent activityIntent;
 
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
 

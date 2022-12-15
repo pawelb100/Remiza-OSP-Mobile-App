@@ -1,26 +1,33 @@
 package edu.wseiz.remizaosp.main;
 
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
+import edu.wseiz.remizaosp.R;
+import edu.wseiz.remizaosp.adapters.PendingEventListAdapter;
 import edu.wseiz.remizaosp.databinding.FragmentDashboardBinding;
 import edu.wseiz.remizaosp.dialogs.DialogStatusSelect;
 import edu.wseiz.remizaosp.interfaces.OnItemListClick;
-import edu.wseiz.remizaosp.listeners.FetchEventListener;
+import edu.wseiz.remizaosp.interfaces.OnPendingEventClick;
+import edu.wseiz.remizaosp.listeners.FetchEventsListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
+import edu.wseiz.remizaosp.listeners.FetchUserRoleListener;
 import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
+import edu.wseiz.remizaosp.listeners.IsConnectedListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Event;
+import edu.wseiz.remizaosp.models.Role;
 import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
@@ -33,7 +40,7 @@ public class DashboardFragment extends Fragment {
     private Status currentStatus;
     private List<Status> statuses;
 
-    private Event lastEvent;
+    private PendingEventListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,10 +49,10 @@ public class DashboardFragment extends Fragment {
         ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
         repository = viewModelProvider.get(Repository.class);
 
-        lastEvent = new Event();
-
+        adapter = null;
         loadData();
 
+        binding.btnAddEvent.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardFragment_to_addEventFragment));
 
         binding.btnChangeStatus.setOnClickListener(v -> {
             DialogStatusSelect dialog = new DialogStatusSelect(getContext());
@@ -80,46 +87,35 @@ public class DashboardFragment extends Fragment {
             dialog.show();
         });
 
-
-        binding.btnAcceptEventParticipation.setOnClickListener(v -> {
-            repository.updateParticipation(lastEvent, true, new UpdateListener() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onFailed() {
-
-                }
-            });
-        });
-
-        binding.btnDeclineEventParticipation.setOnClickListener(v -> {
-            repository.updateParticipation(lastEvent, false, new UpdateListener() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onFailed() {
-
-                }
-            });
-        });
-
-
         return binding.getRoot();
     }
 
 
     @Override public void onDestroyView () {
         super.onDestroyView();
+        repository.removeUserStatusIdListener();
+        repository.removeStatusListListener();
+        repository.removeOngoingEventsListener();
         binding = null;
     }
 
+
+
     private void loadData() {
+
+        repository.fetchUserRole(new FetchUserRoleListener() {
+            @Override
+            public void onSuccess(Role role) {
+                if (role==Role.Officer)
+                    binding.btnAddEvent.setVisibility(View.VISIBLE);
+                else
+                    binding.btnAddEvent.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailed() {}
+        });
+
 
         repository.fetchUserStatusId(new FetchUserStatusIdListener() {
             @Override
@@ -162,16 +158,10 @@ public class DashboardFragment extends Fragment {
             public void onFailed() {handleFail();}
         });
 
-        repository.fetchLastEvent(new FetchEventListener() {
+        repository.fetchOngoingEvents(new FetchEventsListener() {
             @Override
-            public void onSuccess(Event event) {
-                setEvent(event);
-            }
-
-            @Override
-            public void onNoData() {
-                binding.eventCard.setVisibility(View.GONE);
-                binding.participationCard.setVisibility(View.GONE);
+            public void onSuccess(List<Event> events) {
+                setAdapter(events);
             }
 
             @Override
@@ -180,19 +170,63 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    private void setAdapter(List<Event> events) {
+
+        if (adapter==null) {
+            adapter = new PendingEventListAdapter(getContext(), events, repository.getUserId(), new OnPendingEventClick() {
+
+                @Override
+                public void onClick(int position) {
+
+                }
+
+                @Override
+                public void onAccept(int position) {
+                    repository.updateParticipation(events.get(position), true, new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            info("Zaakceptowano");
+                        }
+
+                        @Override
+                        public void onFailed() {
+                            handleFail();
+                        }
+                    });
+                }
+
+                @Override
+                public void onReject(int position) {
+                    repository.updateParticipation(events.get(position), false, new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            info("Zrezygnowano");
+                        }
+
+                        @Override
+                        public void onFailed() {
+                            handleFail();
+                        }
+                    });
+                }
+            });
+            binding.pager.setAdapter(adapter);
+        }
+        else
+            adapter.updateData(events);
+
+        binding.tvCurrentEvents.setText("Aktualne zdarzenia: " + events.size());
+    }
+
+
+    private void info(String text) {
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), text, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
     private void handleFail() {
-        Toast.makeText(getContext(), "Wystąpił problem z połączeniem", Toast.LENGTH_LONG).show();
+        info("Wystąpił problem z połączeniem");
     }
-
-    private void setEvent(Event event) {
-        binding.tvEventTitle.setText(event.getTitle());
-        binding.tvEventStreet.setText(event.getAddress().getStreet());
-        binding.tvEventRegion.setText(event.getAddress().getRegion());
-        CharSequence charSequence = DateUtils.getRelativeTimeSpanString(event.getTimestamp(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
-        binding.tvEventTime.setText(charSequence.toString());
-        lastEvent = event;
-    }
-
 
 
 }

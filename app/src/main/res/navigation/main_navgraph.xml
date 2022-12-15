@@ -9,7 +9,11 @@
         android:id="@+id/dashboardFragment"
         android:name="edu.wseiz.remizaosp.main.DashboardFragment"
         android:label="Centrum"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_addEventFragment"
+            app:destination="@id/addEventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/usersFragment"
         android:name="edu.wseiz.remizaosp.main.UsersFragment"
@@ -30,4 +34,9 @@
         android:name="edu.wseiz.remizaosp.main.SettingsFragment"
         android:label="Ustawienia"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/addEventFragment"
+        android:name="edu.wseiz.remizaosp.main.AddEventFragment"
+        android:label="fragment_add_event"
+        tools:layout="@layout/fragment_add_event" />
 </navigation>

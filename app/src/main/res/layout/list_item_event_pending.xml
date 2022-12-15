@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/event_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivWarningIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_warning_amber_24"
+
+                android:padding="15dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Pożar"
+                android:textSize="20sp"
+                android:textColor="@color/text"
+
+                android:layout_toEndOf="@id/ivWarningIcon"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:id="@+id/tvStreet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Rejtana 16"
+                android:textSize="18sp"
+                android:textColor="@color/text"
+
+                android:layout_below="@id/tvTitle"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                />
+
+            <TextView
+                android:id="@+id/tvRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Mokotów"
+                android:textSize="18sp"
+                android:textColor="@color/text"
+
+                android:layout_below="@id/tvStreet"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="16 godzin temu"
+                android:textSize="14sp"
+                android:textColor="@color/text"
+
+                android:layout_below="@id/tvRegion"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="16dp"
+                />
+
+            <TextView
+                android:id="@+id/tvCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="0"
+                android:textColor="@color/text"
+                android:textSize="20sp"
+
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_below="@id/tvRegion"
+
+                />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:padding="15dp"
+                android:background="@drawable/ic_baseline_people_24"
+
+                android:layout_below="@id/tvRegion"
+                android:layout_toStartOf="@id/tvCount"
+                android:layout_marginEnd="13dp"
+                android:layout_marginTop="20dp"
+
+                />
+
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="8dp"
+                android:layout_below="@id/tvTime"
+                />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/participation_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp"
+
+        android:layout_below="@id/event_card"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/tvAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Uczestnictwo:"
+                android:textSize="20sp"
+                android:textColor="@color/text"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                />
+
+            <ImageButton
+                android:id="@+id/ibAccept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:padding="25dp"
+                android:background="@drawable/ic_baseline_check_24"
+
+                android:layout_marginStart="20dp"
+                android:layout_below="@id/tvAnswer"
+                android:layout_marginTop="10dp"
+
+
+                />
+
+            <ImageButton
+                android:id="@+id/ibReject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:padding="25dp"
+                android:background="@drawable/ic_baseline_clear_24"
+
+                android:layout_below="@id/tvAnswer"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/ibAccept"
+                android:layout_marginStart="20dp"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="8dp"
+
+                android:layout_below="@id/ibReject"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_below="@id/tvAnswer"
+                />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

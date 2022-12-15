@@ -1,15 +1,9 @@
 package edu.wseiz.remizaosp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import edu.wseiz.remizaosp.databinding.ActivityLoginBinding;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

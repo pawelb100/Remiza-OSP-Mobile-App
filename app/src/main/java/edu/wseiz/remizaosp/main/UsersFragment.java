@@ -43,6 +43,7 @@ public class UsersFragment extends Fragment {
         repository = viewModelProvider.get(Repository.class);
 
         statusTitlesWithUsers = new ArrayList<>();
+        adapter = null;
 
         loadData();
 
@@ -51,6 +52,7 @@ public class UsersFragment extends Fragment {
 
     @Override public void onDestroyView() {
         super.onDestroyView();
+        repository.removeUsersListener();
         binding = null;
     }
 
@@ -68,10 +70,7 @@ public class UsersFragment extends Fragment {
 
                         statusTitlesWithUsers = prepareListToDisplay(statuses, data);
 
-                        if(adapter!=null)
-                            adapter.notifyDataSetChanged();
-                        else
-                            setAdapter();
+                        setAdapter();
                     }
 
                     @Override
@@ -122,9 +121,15 @@ public class UsersFragment extends Fragment {
 
 
     private void setAdapter() {
-        adapter = new StatusWithUsersListAdapter(getContext(), statusTitlesWithUsers);
-        binding.rvStatusesWithUsers.setAdapter(adapter);
-        binding.rvStatusesWithUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        if (adapter==null) {
+            adapter = new StatusWithUsersListAdapter(getContext(), statusTitlesWithUsers);
+            binding.rvStatusesWithUsers.setAdapter(adapter);
+            binding.rvStatusesWithUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+        else
+            adapter.updateData(statusTitlesWithUsers);
+
     }
 
 }

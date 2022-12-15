@@ -14,23 +14,24 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import edu.wseiz.remizaosp.listeners.AddEventListener;
-import edu.wseiz.remizaosp.listeners.FetchEventListener;
 import edu.wseiz.remizaosp.listeners.FetchEventsListener;
 import edu.wseiz.remizaosp.listeners.FetchParticipationListListener;
 import edu.wseiz.remizaosp.listeners.FetchParticipationListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
+import edu.wseiz.remizaosp.listeners.FetchUserRoleListener;
 import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
 import edu.wseiz.remizaosp.listeners.FetchUsersListener;
+import edu.wseiz.remizaosp.listeners.IsConnectedListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Address;
 import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Participation;
+import edu.wseiz.remizaosp.models.Role;
 import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
 
@@ -39,30 +40,43 @@ public class Repository extends AndroidViewModel {
     private final FirebaseDatabase database;
     private final FirebaseAuth auth;
 
+    private ValueEventListener userStatusIdListener;
+    private ValueEventListener statusListListener;
+    private ValueEventListener eventsListener;
+    private ValueEventListener ongoingEventsListener;
+    private ValueEventListener usersListener;
+
+    private ValueEventListener isConnectedListener;
+
     public Repository(@NonNull Application application) {
         super(application);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+        //database.getReference().keepSynced(true);
+
+    }
+
+    public String getUserId() {
+        return auth.getUid();
     }
 
 
     public void updateStatus(String StatusId, UpdateListener listener) {
-        if (auth.getUid()!=null) {
+        if (auth.getUid() != null) {
             database.getReference().child("users").child(auth.getUid()).child("statusId").setValue(StatusId).addOnCompleteListener(task -> {
-                if(task.isSuccessful())
+                if (task.isSuccessful())
                     listener.onSuccess();
                 else
                     listener.onFailed();
             });
-        }
-        else
+        } else
             listener.onFailed();
     }
 
     public void updateUser(User user, UpdateListener listener) {
 
         database.getReference().child("users").child(user.getUid()).setValue(user).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
                 listener.onSuccess();
             else
                 listener.onFailed();
@@ -75,7 +89,7 @@ public class Repository extends AndroidViewModel {
         String key = ref.push().getKey();
         event.setUid(key);
         ref.child(key).setValue(event).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
                 listener.onSuccess(key);
             else
                 listener.onFailed();
@@ -85,7 +99,7 @@ public class Repository extends AndroidViewModel {
     public void updateEvent(Event event, UpdateListener listener) {
 
         database.getReference().child("events").child(event.getUid()).setValue(event).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
                 listener.onSuccess();
             else
                 listener.onFailed();
@@ -95,15 +109,15 @@ public class Repository extends AndroidViewModel {
 
     public void fetchUserStatusId(FetchUserStatusIdListener listener) {
 
-        if (auth.getUid()!=null) {
-            database.getReference().child("users").child(auth.getUid()).child("statusId").addListenerForSingleValueEvent(new ValueEventListener() {
+        if (auth.getUid() != null) {
+
+            userStatusIdListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         String statusId = snapshot.getValue(String.class);
                         listener.onSuccess(statusId);
-                    }
-                    else
+                    } else
                         listener.onNoData();
                 }
 
@@ -111,9 +125,10 @@ public class Repository extends AndroidViewModel {
                 public void onCancelled(@NonNull DatabaseError error) {
                     listener.onFailed();
                 }
-            });
-        }
-        else
+            };
+
+            database.getReference().child("users").child(auth.getUid()).child("statusId").addValueEventListener(userStatusIdListener);
+        } else
             listener.onFailed();
 
     }
@@ -126,8 +141,7 @@ public class Repository extends AndroidViewModel {
                 if (snapshot.exists()) {
                     Status status = snapshot.getValue(Status.class);
                     listener.onSuccess(status);
-                }
-                else
+                } else
                     listener.onNoData();
             }
 
@@ -140,14 +154,14 @@ public class Repository extends AndroidViewModel {
 
     public void fetchStatusList(FetchStatusListListener listener) {
 
-        database.getReference().child("status").addListenerForSingleValueEvent(new ValueEventListener() {
+        statusListListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 List<Status> statuses = new ArrayList<>();
 
-                if(snapshot.exists())
-                    for(DataSnapshot child : snapshot.getChildren()) {
+                if (snapshot.exists())
+                    for (DataSnapshot child : snapshot.getChildren()) {
                         Status status = child.getValue(Status.class);
                         statuses.add(status);
                     }
@@ -159,19 +173,22 @@ public class Repository extends AndroidViewModel {
             public void onCancelled(@NonNull DatabaseError error) {
                 listener.onFailed();
             }
-        });
+        };
+
+        database.getReference().child("status").addValueEventListener(statusListListener);
 
     }
 
     public void fetchUsers(FetchUsersListener listener) {
-        database.getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        usersListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 List<User> users = new ArrayList<>();
 
-                if(snapshot.exists())
-                    for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                if (snapshot.exists())
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         User user = dataSnapshot.getValue(User.class);
                         users.add(user);
                     }
@@ -183,19 +200,44 @@ public class Repository extends AndroidViewModel {
             public void onCancelled(@NonNull DatabaseError error) {
                 listener.onFailed();
             }
-        });
+        };
+
+        database.getReference().child("users").addValueEventListener(usersListener);
+
+    }
+
+    public void fetchUserRole(FetchUserRoleListener listener) {
+
+        if (auth.getUid() != null)
+            database.getReference().child("users").child(auth.getUid()).child("role").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        Role role = snapshot.getValue(Role.class);
+                        listener.onSuccess(role);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    listener.onFailed();
+                }
+            });
+        else
+            listener.onFailed();
     }
 
     public void fetchEvents(FetchEventsListener listener) {
 
         Query query = database.getReference().child("events").orderByKey();
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        eventsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 List<Event> events = new ArrayList<>();
 
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot eventData : snapshot.getChildren()) {
                         Event event = eventData.getValue(Event.class);
 
@@ -216,34 +258,40 @@ public class Repository extends AndroidViewModel {
             public void onCancelled(@NonNull DatabaseError error) {
                 listener.onFailed();
             }
-        });
+        };
+
+        query.addValueEventListener(eventsListener);
     }
 
-    public void fetchLastEvent(FetchEventListener listener) {
+    public void fetchOngoingEvents(FetchEventsListener listener) {
 
-        Query query = database.getReference().child("events").orderByKey().limitToLast(1);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = database.getReference().child("events").orderByKey();
+        ongoingEventsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 List<Event> events = new ArrayList<>();
 
-                if(dataSnapshot.exists()) {
-                    for(DataSnapshot eventData : dataSnapshot.getChildren()) {
-                        Event event = eventData.getValue(Event.class);
+                if (dataSnapshot.exists()) {
 
-                        List<Participation> participationList = new ArrayList<>();
-                        for(DataSnapshot participationChild : eventData.child("participation").getChildren())
-                            participationList.add(participationChild.getValue(Participation.class));
+                    for (DataSnapshot eventData : dataSnapshot.getChildren()) {
 
-                        event.setParticipationList(participationList);
-                        events.add(event);
+                        if (Boolean.TRUE.equals(eventData.child("ongoing").getValue(Boolean.class))) {
+                            Event event = eventData.getValue(Event.class);
+
+                            List<Participation> participationList = new ArrayList<>();
+                            for (DataSnapshot participationChild : eventData.child("participation").getChildren())
+                                participationList.add(participationChild.getValue(Participation.class));
+
+                            event.setParticipationList(participationList);
+                            events.add(event);
+                        }
                     }
 
-                    listener.onSuccess(events.get(0));
+                    listener.onSuccess(events);
+                } else {
+                    //listener.onNoData();
                 }
-                else
-                    listener.onNoData();
 
             }
 
@@ -251,7 +299,9 @@ public class Repository extends AndroidViewModel {
             public void onCancelled(DatabaseError databaseError) {
                 listener.onFailed();
             }
-        });
+        };
+
+        query.addValueEventListener(ongoingEventsListener);
 
     }
 
@@ -261,7 +311,7 @@ public class Repository extends AndroidViewModel {
         Participation participation = new Participation(auth.getUid(), isParticipant);
 
         database.getReference().child("events").child(event.getUid()).child("participation").child(participation.getUserId()).setValue(participation).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
                 listener.onSuccess();
             else
                 listener.onFailed();
@@ -270,7 +320,7 @@ public class Repository extends AndroidViewModel {
 
     public void fetchParticipation(Event event, FetchParticipationListener listener) {
 
-        if (auth.getUid()!=null) {
+        if (auth.getUid() != null) {
             database.getReference().child("events").child(event.getUid()).child("participation").child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -286,8 +336,7 @@ public class Repository extends AndroidViewModel {
                     listener.onFailed();
                 }
             });
-        }
-        else
+        } else
             listener.onFailed();
     }
 
@@ -299,14 +348,13 @@ public class Repository extends AndroidViewModel {
 
                 List<Participation> participationList = new ArrayList<>();
 
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot child : snapshot.getChildren()) {
                         Participation participation = child.getValue(Participation.class);
                         participationList.add(participation);
                     }
                     listener.onSuccess(participationList);
-                }
-                else
+                } else
                     listener.onNoData();
             }
 
@@ -326,9 +374,9 @@ public class Repository extends AndroidViewModel {
 
         DatabaseReference ref = database.getReference().child("status");
 
-        String[] str = {"W drodze do remizy", "Dojazd na miejsce","W straży", "W gotowości", "Na telefon", "W razie potrzeby dojadę", "Brak dostępności"};
+        String[] str = {"W drodze do remizy", "Dojazd na miejsce", "W straży", "W gotowości", "Na telefon", "W razie potrzeby dojadę", "Brak dostępności"};
 
-        for (int i=0; i<str.length; ++i) {
+        for (int i = 0; i < str.length; ++i) {
             String key = ref.push().getKey();
             Status status = new Status(key, str[i]);
             ref.child(key).setValue(status);
@@ -344,7 +392,67 @@ public class Repository extends AndroidViewModel {
         return event;
     }
 
+    public void removeEventsListener() {
+        database.getReference().child("events").removeEventListener(eventsListener);
+        eventsListener = null;
+    }
 
+    public void removeOngoingEventsListener() {
+        database.getReference().child("events").removeEventListener(ongoingEventsListener);
+        ongoingEventsListener = null;
+    }
 
+    public void removeStatusListListener() {
+        database.getReference().child("status").removeEventListener(statusListListener);
+        statusListListener = null;
+    }
+
+    public void removeUserStatusIdListener() {
+        if (auth.getUid() != null) {
+            database.getReference().child("users").child(auth.getUid()).child("statusId").removeEventListener(userStatusIdListener);
+            userStatusIdListener = null;
+        }
+    }
+
+    public void removeUsersListener() {
+        database.getReference().child("users").removeEventListener(usersListener);
+        usersListener = null;
+    }
+
+    public void isConnected(IsConnectedListener listener) {
+        isConnectedListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean connected = Boolean.TRUE.equals(snapshot.getValue(Boolean.class));
+                if (connected)
+                    listener.onIsConnected();
+                else
+                    listener.onNoConnection();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        database.getReference(".info/connected").addValueEventListener(isConnectedListener);
+
+    }
+
+    public void removeIsConnectedListener() {
+        database.getReference().removeEventListener(isConnectedListener);
+        isConnectedListener = null;
+    }
+
+    public void clearAll() {
+
+        removeOngoingEventsListener();
+        removeEventsListener();
+        removeUsersListener();
+        removeStatusListListener();
+        removeUserStatusIdListener();
+
+    }
 
 }
