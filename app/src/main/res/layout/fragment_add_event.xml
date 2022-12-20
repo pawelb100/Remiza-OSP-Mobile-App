@@ -1,14 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.AddEventFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/title_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
 
-</FrameLayout>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvThreatType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Rodzaj zagrożenia:"
+
+                android:textColor="@color/text"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/spinnerThreat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/tvThreatType"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+
+                android:spinnerMode="dialog"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+
+                android:layout_below="@id/spinnerThreat" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/address_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/title_card"
+        android:layout_marginStart="16dp"
+
+        android:layout_marginTop="16dp"
+
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:text="Adres:"
+
+                android:textColor="@color/text"
+                android:textSize="20sp" />
+
+
+            <EditText
+                android:id="@+id/etAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/txt2"
+                android:layout_marginStart="20dp"
+
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Wprowadź adres" />
+
+            <TextView
+                android:id="@+id/txt3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/etAddress"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+
+                android:text="Region:"
+                android:textColor="@color/text"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/spinnerRegion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/txt3"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+
+                android:spinnerMode="dialog"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+
+                android:layout_below="@id/spinnerRegion" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/description_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+
+        android:layout_below="@id/address_card"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+
+                android:text="Szczegóły:"
+
+                android:textColor="@color/text"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/tvDescription"
+                android:layout_marginStart="20dp"
+
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Wprowadź opis" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+
+                android:layout_below="@id/etDescription" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/details_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/description_card"
+        android:layout_marginStart="16dp"
+
+        android:layout_marginTop="16dp"
+
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvOngoing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+
+                android:text="Zdarzenie trwające"
+                android:textColor="@color/text"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvNotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+
+                android:layout_below="@id/tvOngoing"
+
+                android:text="Wyślij powiadomienie"
+                android:textColor="@color/text"
+                android:textSize="20sp" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchOngoing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:checked="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/tvOngoing"
+                android:layout_marginEnd="20dp"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchNotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:checked="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/tvNotify"
+                android:layout_marginEnd="20dp"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+
+                android:layout_below="@id/tvNotify" />
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnAddEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/details_card"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Utwórz zdarzenie"
+
+        android:textSize="15sp"
+
+        />
+
+</RelativeLayout>

@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import edu.wseiz.remizaosp.listeners.AddEventListener;
@@ -288,6 +289,7 @@ public class Repository extends AndroidViewModel {
                         }
                     }
 
+                    events.sort(Comparator.comparing(Event::getTimestamp).reversed());
                     listener.onSuccess(events);
                 } else {
                     //listener.onNoData();

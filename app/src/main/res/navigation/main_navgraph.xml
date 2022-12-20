@@ -37,6 +37,6 @@
     <fragment
         android:id="@+id/addEventFragment"
         android:name="edu.wseiz.remizaosp.main.AddEventFragment"
-        android:label="fragment_add_event"
+        android:label="Dodaj zdarzenie"
         tools:layout="@layout/fragment_add_event" />
 </navigation>
