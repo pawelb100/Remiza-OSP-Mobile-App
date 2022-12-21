@@ -43,7 +43,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                 android:spinnerMode="dialog"
                 />
 
@@ -124,7 +124,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                 android:spinnerMode="dialog"
                 />
 

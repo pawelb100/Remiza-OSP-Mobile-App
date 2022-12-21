@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -42,6 +43,8 @@ public class DashboardFragment extends Fragment {
 
     private PendingEventListAdapter adapter;
 
+    private Role userRole;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
@@ -52,7 +55,7 @@ public class DashboardFragment extends Fragment {
         adapter = null;
         loadData();
 
-        binding.btnAddEvent.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardFragment_to_addEventFragment));
+
 
         binding.btnChangeStatus.setOnClickListener(v -> {
             DialogStatusSelect dialog = new DialogStatusSelect(getContext());
@@ -69,15 +72,15 @@ public class DashboardFragment extends Fragment {
                     Status status = (Status) item;
                     repository.updateStatus(status.getUid(), new UpdateListener() {
                         @Override
-                        public void onSuccess() {
-                            currentStatus = status;
-                            binding.txtStatus.setText(status.getTitle());
-                            dialog.dismiss();
-                        }
+                        public void onSuccess() {info("Zaktualizowano status");}
 
                         @Override
                         public void onFailed() {handleFail();}
                     });
+
+                    currentStatus = status;
+                    binding.txtStatus.setText(status.getTitle());
+                    dialog.dismiss();
                 }
 
                 @Override
@@ -106,10 +109,11 @@ public class DashboardFragment extends Fragment {
         repository.fetchUserRole(new FetchUserRoleListener() {
             @Override
             public void onSuccess(Role role) {
-                if (role==Role.Officer)
-                    binding.btnAddEvent.setVisibility(View.VISIBLE);
-                else
-                    binding.btnAddEvent.setVisibility(View.GONE);
+                if (role==Role.Officer) {
+                    binding.addFab.setVisibility(View.VISIBLE);
+                    binding.addFab.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardFragment_to_addEventFragment));
+                }
+                userRole = role;
             }
 
             @Override
@@ -177,7 +181,10 @@ public class DashboardFragment extends Fragment {
 
                 @Override
                 public void onClick(int position) {
-
+                    Bundle bundle = new Bundle();
+                    bundle.putString("eventId", events.get(position).getUid());
+                    bundle.putBoolean("editable", userRole == Role.Officer);
+                    Navigation.findNavController(binding.getRoot()).navigate(R.id.action_dashboardFragment_to_eventFragment, bundle);
                 }
 
                 @Override

@@ -39,8 +39,9 @@ public class RegisterFragment extends Fragment {
             String name = binding.namebox.getText().toString();
             String email = binding.emailbox.getText().toString();
             String pass = binding.passwordbox.getText().toString();
+            String confirm = binding.passwordConfirmbox.getText().toString();
 
-            if(verifyInput(name, email, pass))
+            if(verifyInput(name, email, pass, confirm))
             {
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
                     if(task.isSuccessful())
@@ -82,11 +83,17 @@ public class RegisterFragment extends Fragment {
         binding = null;
     }
 
-    private Boolean verifyInput(String name, String email, String pass) {
+    private boolean verifyInput(String name, String email, String pass, String passConfirm) {
         if (!(name.isEmpty())) {
             if(!(email.isEmpty())) {
                 if (!(pass.isEmpty())) {
-                    return true;
+                    if (pass.equals(passConfirm))
+                        return true;
+                    else
+                    {
+                        Toast.makeText(getActivity(), "Hasła są różne", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
                 else
                 {

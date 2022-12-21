@@ -14,20 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import edu.wseiz.remizaosp.R;
-import edu.wseiz.remizaosp.interfaces.OnItemListClick;
-import edu.wseiz.remizaosp.models.Event;
-import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
-import edu.wseiz.remizaosp.utils.EventsDiffUtilCallback;
 import edu.wseiz.remizaosp.utils.UsersInStatusDiffUtilCallback;
 
-public class UsersInStatusListAdapter extends RecyclerView.Adapter<UsersInStatusListAdapter.ViewHolder>  {
+public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.ViewHolder>  {
 
     private final Context context;
     private List<User> users;
 
 
-    public UsersInStatusListAdapter(Context context, List<User> users) {
+    public UsersListAdapter(Context context, List<User> users) {
         this.context = context;
         this.users = users;
     }
@@ -47,7 +43,7 @@ public class UsersInStatusListAdapter extends RecyclerView.Adapter<UsersInStatus
         return new ViewHolder(
                 LayoutInflater
                         .from(context)
-                        .inflate(R.layout.list_item_users_in_status, parent, false)
+                        .inflate(R.layout.list_item_users, parent, false)
         );
     }
 

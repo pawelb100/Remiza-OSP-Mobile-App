@@ -12,14 +12,10 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import edu.wseiz.remizaosp.R;
-import edu.wseiz.remizaosp.models.Event;
-import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
-import edu.wseiz.remizaosp.utils.EventsDiffUtilCallback;
 import edu.wseiz.remizaosp.utils.StatusWithUsersDiffUtilCallback;
 
 public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithUsersListAdapter.ViewHolder>  {
@@ -69,7 +65,7 @@ public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithU
         viewHolder.tvStatusName.setText(currentItem.first);
 
         if (viewHolder.adapter==null) {
-            viewHolder.adapter = new UsersInStatusListAdapter(context, currentItem.second);
+            viewHolder.adapter = new UsersListAdapter(context, currentItem.second);
             viewHolder.rvStatusesWithUsers.setAdapter(viewHolder.adapter);
             viewHolder.rvStatusesWithUsers.setLayoutManager(new LinearLayoutManager(context));
         }
@@ -81,7 +77,7 @@ public class StatusWithUsersListAdapter extends RecyclerView.Adapter<StatusWithU
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvStatusName;
         private final RecyclerView rvStatusesWithUsers;
-        private UsersInStatusListAdapter adapter = null;
+        private UsersListAdapter adapter = null;
 
         public ViewHolder(@NonNull View view) {
             super(view);

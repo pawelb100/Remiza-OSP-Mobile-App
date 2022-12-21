@@ -93,6 +93,10 @@ public class PendingEventListAdapter extends RecyclerView.Adapter<PendingEventLi
         CharSequence charSequence = DateUtils.getRelativeTimeSpanString(currentItem.getTimestamp(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
         viewHolder.tvTime.setText(charSequence.toString());
 
+        viewHolder.parentView.setOnClickListener(v -> listener.onClick(position));
+        viewHolder.ibAccept.setOnClickListener(v -> listener.onAccept(position));
+        viewHolder.ibReject.setOnClickListener(v -> listener.onReject(position));
+
     }
 
     public void updateData(List<Event> events) {
@@ -114,8 +118,12 @@ public class PendingEventListAdapter extends RecyclerView.Adapter<PendingEventLi
         private final ImageButton ibAccept;
         private final ImageButton ibReject;
 
+        private final View parentView;
+
         public ViewHolder(@NonNull View view) {
             super(view);
+
+            this.parentView = view;
 
             this.tvTitle = view.findViewById(R.id.tvTitle);
             this.tvStreet = view.findViewById(R.id.tvStreet);
@@ -126,9 +134,9 @@ public class PendingEventListAdapter extends RecyclerView.Adapter<PendingEventLi
             this.ibAccept = view.findViewById(R.id.ibAccept);
             this.ibReject = view.findViewById(R.id.ibReject);
 
-            view.setOnClickListener(v -> listener.onClick(getAdapterPosition()));
-            this.ibAccept.setOnClickListener(v -> listener.onAccept(getAdapterPosition()));
-            this.ibReject.setOnClickListener(v -> listener.onReject(getAdapterPosition()));
+//            view.setOnClickListener(v -> listener.onClick(getAdapterPosition()));
+//            this.ibAccept.setOnClickListener(v -> listener.onAccept(getAdapterPosition()));
+//            this.ibReject.setOnClickListener(v -> listener.onReject(getAdapterPosition()));
 
         }
 

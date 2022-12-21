@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_addEventFragment"
             app:destination="@id/addEventFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_eventFragment"
+            app:destination="@id/eventFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
@@ -23,7 +26,11 @@
         android:id="@+id/eventsFragment"
         android:name="edu.wseiz.remizaosp.main.EventsFragment"
         android:label="Zdarzenia"
-        tools:layout="@layout/fragment_events" />
+        tools:layout="@layout/fragment_events" >
+        <action
+            android:id="@+id/action_eventsFragment_to_eventFragment"
+            app:destination="@id/eventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chatFragment"
         android:name="edu.wseiz.remizaosp.main.ChatFragment"
@@ -39,4 +46,18 @@
         android:name="edu.wseiz.remizaosp.main.AddEventFragment"
         android:label="Dodaj zdarzenie"
         tools:layout="@layout/fragment_add_event" />
+    <fragment
+        android:id="@+id/eventFragment"
+        android:name="edu.wseiz.remizaosp.main.EventFragment"
+        android:label="Zdarzenie"
+        tools:layout="@layout/fragment_event" >
+        <action
+            android:id="@+id/action_eventFragment_to_editEventFragment"
+            app:destination="@id/editEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editEventFragment"
+        android:name="edu.wseiz.remizaosp.main.EditEventFragment"
+        android:label="Edytuj zdarzenie"
+        tools:layout="@layout/fragment_edit_event" />
 </navigation>

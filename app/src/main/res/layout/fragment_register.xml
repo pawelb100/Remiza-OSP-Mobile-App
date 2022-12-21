@@ -75,6 +75,24 @@
 
         />
 
+    <EditText
+        android:id="@+id/passwordConfirmbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Powtórz hasło"
+        android:textColor="@color/text"
+        android:textSize="20sp"
+        android:inputType="textPassword"
+
+        app:layout_constraintTop_toBottomOf="@id/passwordbox"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+
+        />
+
     <Button
         android:id="@+id/signup"
         android:layout_width="wrap_content"
@@ -82,7 +100,7 @@
         android:text="Utwórz nowe konto"
         android:textSize="15sp"
 
-        app:layout_constraintTop_toBottomOf="@+id/passwordbox"
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmbox"
         android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

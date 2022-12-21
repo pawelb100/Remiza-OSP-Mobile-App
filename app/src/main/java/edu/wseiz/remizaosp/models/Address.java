@@ -28,9 +28,5 @@ public class Address {
         this.region = region;
     }
 
-    public String getStreetAndRegion() {
-        return street + ", " + region;
-    }
-
 
 }

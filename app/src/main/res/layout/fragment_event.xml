@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.EventFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/title_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivDangerIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/ic_baseline_warning_amber_24"
+                        android:padding="15dp" />
+
+
+                    <TextView
+                        android:id="@+id/tvThreat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toEndOf="@id/ivDangerIcon"
+                        android:text="Zagrożenie:"
+
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tvThreatType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/tvThreat"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Pożar"
+
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/tvThreatType"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Opis"
+
+                        android:textColor="@color/text"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvOngoing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/tvDescription"
+                        android:layout_marginStart="16dp"
+
+
+                        android:layout_marginTop="10dp"
+                        android:text="Zdarzenie trwające"
+                        android:textColor="@color/grey_text"
+                        android:textSize="16sp" />
+
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="15dp"
+
+                        android:layout_below="@id/tvOngoing" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/address_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/title_card"
+                android:layout_marginStart="16dp"
+
+                android:layout_marginTop="16dp"
+
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivLocationIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/ic_baseline_location_on_24"
+                        android:padding="15dp" />
+
+
+                    <TextView
+                        android:id="@+id/tvLocalization"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toEndOf="@id/ivLocationIcon"
+                        android:text="Lokalizacja:"
+
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tvAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/tvLocalization"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Adres"
+
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+
+                    <TextView
+                        android:id="@+id/tvRegion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/tvAddress"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="10dp"
+
+                        android:text="Region"
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+
+                    <ImageButton
+                        android:id="@+id/btnShowOnMap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_alignBaseline="@id/tvRegion"
+                        android:layout_alignParentEnd="true"
+
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/ic_outline_map_24"
+                        android:padding="22dp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+
+                        android:layout_below="@id/btnShowOnMap" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/accepted_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/address_card"
+                android:layout_marginStart="16dp"
+
+                android:layout_marginTop="16dp"
+
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:id="@+id/ivAcceptedIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/ic_baseline_check_24"
+                        android:padding="15dp" />
+
+
+                    <TextView
+                        android:id="@+id/tvAccetpedParticipants"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toEndOf="@id/ivAcceptedIcon"
+                        android:text="Zaakceptowali:"
+
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rcAccepted"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvAccetpedParticipants"
+                        android:layout_marginTop="10dp"
+                        tools:listitem="@layout/list_item_users"
+
+                        />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="15dp"
+
+                        android:layout_below="@id/rcAccepted" />
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rejected_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/accepted_card"
+                android:layout_marginStart="16dp"
+
+                android:layout_marginTop="16dp"
+
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:id="@+id/ivRejectedIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/ic_baseline_clear_24"
+                        android:padding="15dp" />
+
+
+                    <TextView
+                        android:id="@+id/tvRejectedParticipants"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toEndOf="@id/ivRejectedIcon"
+                        android:text="Zrezygnowali:"
+
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rcRejected"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvRejectedParticipants"
+                        android:layout_marginTop="10dp"
+                        tools:listitem="@layout/list_item_users"
+
+                        />
+
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="15dp"
+
+                        android:layout_below="@id/rcRejected" />
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+
+                android:layout_below="@id/rejected_card" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/edit_fab"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:visibility="visible"
+        app:fabCustomSize="64dp"
+        app:maxImageSize="32dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_baseline_edit_24"
+        android:visibility="visible"
+        app:fabCustomSize="64dp"
+        app:maxImageSize="32dp" />
+
+
+</RelativeLayout>
