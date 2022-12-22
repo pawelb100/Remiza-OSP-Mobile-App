@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -63,6 +64,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         viewHolder.tvStreet.setText(currentItem.getAddress().getStreet());
         viewHolder.tvRegion.setText(currentItem.getAddress().getRegion());
 
+        if (currentItem.isOngoing())
+            viewHolder.ivIcon.setBackgroundResource(R.drawable.ic_baseline_warning_amber_24);
+        else
+            viewHolder.ivIcon.setBackgroundResource(R.drawable.ic_baseline_calendar_today_24);
 
         int count = 0;
         if (currentItem.getParticipationList()!=null)
@@ -94,6 +99,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView ivIcon;
         private final TextView tvTitle;
         private final TextView tvStreet;
         private final TextView tvRegion;
@@ -104,6 +110,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         public ViewHolder(@NonNull View view) {
             super(view);
             this.parentView = view;
+            this.ivIcon = view.findViewById(R.id.ivWarningIcon);
             this.tvTitle = view.findViewById(R.id.tvTitle);
             this.tvStreet = view.findViewById(R.id.tvStreet);
             this.tvRegion = view.findViewById(R.id.tvRegion);

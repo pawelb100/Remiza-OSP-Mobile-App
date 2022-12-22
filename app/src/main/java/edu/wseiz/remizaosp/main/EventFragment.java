@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Objects;
 
 import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.adapters.UsersListAdapter;
@@ -46,8 +47,14 @@ public class EventFragment extends Fragment {
         ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
         repository = viewModelProvider.get(Repository.class);
 
-        eventId = getArguments().getString("eventId");
-        boolean editable = getArguments().getBoolean("editable");
+        boolean editable = false;
+        acceptedAdapter = null;
+        rejectedAdapter = null;
+
+        if (getArguments()!=null) {
+            eventId = getArguments().getString("eventId");
+            editable = getArguments().getBoolean("editable");
+        }
 
         binding.btnShowOnMap.setOnClickListener(v -> {
             Uri gmmIntentUri = Uri.parse("geo:0,0?q="+binding.tvAddress.getText().toString()+", "+binding.tvRegion.getText().toString());
@@ -72,10 +79,13 @@ public class EventFragment extends Fragment {
                         repository.deleteEvent(eventId, new UpdateListener() {
                             @Override
                             public void onSuccess() {
+                                info("Usunięto");
+                                quit();
                             }
 
                             @Override
                             public void onFailed() {
+                                handleFail();
                             }
                         });
                     })
@@ -88,6 +98,11 @@ public class EventFragment extends Fragment {
             @Override
             public void onSuccess(Event event) {
                 binding.tvThreatType.setText(event.getTitle());
+
+                if (event.isOngoing())
+                    binding.ivDangerIcon.setBackgroundResource(R.drawable.ic_baseline_warning_amber_24);
+                else
+                    binding.ivDangerIcon.setBackgroundResource(R.drawable.ic_baseline_calendar_today_24);
 
                 if(!(event.getDescription().isEmpty()))
                     binding.tvDescription.setText(event.getDescription());
@@ -136,7 +151,8 @@ public class EventFragment extends Fragment {
 
             @Override
             public void onNoData() {
-                Navigation.findNavController(binding.getRoot()).popBackStack();
+                info("Brak danych");
+                quit();
             }
 
             @Override

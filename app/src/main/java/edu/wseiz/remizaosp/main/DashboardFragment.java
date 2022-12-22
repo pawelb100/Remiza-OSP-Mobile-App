@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -25,7 +24,6 @@ import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
 import edu.wseiz.remizaosp.listeners.FetchUserRoleListener;
 import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
-import edu.wseiz.remizaosp.listeners.IsConnectedListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Role;
@@ -54,7 +52,6 @@ public class DashboardFragment extends Fragment {
 
         adapter = null;
         loadData();
-
 
 
         binding.btnChangeStatus.setOnClickListener(v -> {
@@ -184,7 +181,7 @@ public class DashboardFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("eventId", events.get(position).getUid());
                     bundle.putBoolean("editable", userRole == Role.Officer);
-                    Navigation.findNavController(binding.getRoot()).navigate(R.id.action_dashboardFragment_to_eventFragment, bundle);
+                    Navigation.findNavController(binding.getRoot()).navigate(R.id.eventFragment, bundle);
                 }
 
                 @Override

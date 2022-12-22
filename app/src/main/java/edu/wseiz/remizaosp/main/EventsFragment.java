@@ -40,6 +40,8 @@ public class EventsFragment extends Fragment {
         ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
         repository = viewModelProvider.get(Repository.class);
 
+        adapter = null;
+
         repository.fetchUserRole(new FetchUserRoleListener() {
             @Override
             public void onSuccess(Role role) {

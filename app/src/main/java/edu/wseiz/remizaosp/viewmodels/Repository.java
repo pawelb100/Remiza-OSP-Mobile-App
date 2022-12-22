@@ -3,16 +3,17 @@ package edu.wseiz.remizaosp.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.wseiz.remizaosp.listeners.AddEventListener;
+import edu.wseiz.remizaosp.listeners.FetchCurrentUserListener;
 import edu.wseiz.remizaosp.listeners.FetchEventListener;
 import edu.wseiz.remizaosp.listeners.FetchEventsListener;
 import edu.wseiz.remizaosp.listeners.FetchParticipationListListener;
@@ -32,9 +34,7 @@ import edu.wseiz.remizaosp.listeners.FetchUserRoleListener;
 import edu.wseiz.remizaosp.listeners.FetchUserStatusIdListener;
 import edu.wseiz.remizaosp.listeners.FetchUsersByParticipationsListener;
 import edu.wseiz.remizaosp.listeners.FetchUsersListener;
-import edu.wseiz.remizaosp.listeners.IsConnectedListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
-import edu.wseiz.remizaosp.models.Address;
 import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Participation;
 import edu.wseiz.remizaosp.models.Role;
@@ -53,7 +53,7 @@ public class Repository extends AndroidViewModel {
     private ValueEventListener ongoingEventsListener;
     private ValueEventListener usersListener;
 
-    private ValueEventListener isConnectedListener;
+    private ValueEventListener currentUserListener;
 
     public Repository(@NonNull Application application) {
         super(application);
@@ -114,13 +114,39 @@ public class Repository extends AndroidViewModel {
         });
     }
 
-    public void updateEvent(Event event, UpdateListener listener) {
+    public void updateEvent(Event currentEvent, Event newEvent, UpdateListener listener) {
 
-        database.getReference().child("events").child(event.getUid()).setValue(event).addOnCompleteListener(task -> {
-            if (task.isSuccessful())
-                listener.onSuccess();
-            else
-                listener.onFailed();
+
+        database.getReference().child("events").child(currentEvent.getUid()).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                if (!(currentEvent.getTitle().equals(newEvent.getTitle())))
+                    currentData.child("title").setValue(newEvent.getTitle());
+
+                if (!(currentEvent.getDescription().equals(newEvent.getDescription())))
+                    currentData.child("description").setValue(newEvent.getDescription());
+
+                if (!(currentEvent.getAddress().getStreet().equals(newEvent.getAddress().getStreet())))
+                    currentData.child("address").child("street").setValue(newEvent.getAddress().getStreet());
+
+                if (!(currentEvent.getAddress().getRegion().equals(newEvent.getAddress().getRegion())))
+                    currentData.child("address").child("region").setValue(newEvent.getAddress().getRegion());
+
+                if (currentEvent.isOngoing()!=newEvent.isOngoing())
+                    currentData.child("ongoing").setValue(newEvent.isOngoing());
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (committed)
+                    listener.onSuccess();
+                else
+                    listener.onFailed();
+            }
         });
     }
 
@@ -326,8 +352,6 @@ public class Repository extends AndroidViewModel {
 
     public void fetchEventById(String eventId, FetchEventListener listener) {
 
-        Query query = database.getReference().child("events").child(eventId);
-
         eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -353,6 +377,47 @@ public class Repository extends AndroidViewModel {
 
         database.getReference().child("events").child(eventId).addValueEventListener(eventListener);
 
+    }
+
+    public void fetchCurrentUser(FetchCurrentUserListener listener) {
+
+        currentUserListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    listener.onSuccess(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                listener.onFailed();
+            }
+        };
+
+        database.getReference().child("users").child(auth.getUid()).addValueEventListener(currentUserListener);
+
+    }
+
+
+    public void singleFetchEventById(String eventId, FetchEventListener listener) {
+        database.getReference().child("events").child(eventId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Event event = snapshot.getValue(Event.class);
+
+                    listener.onSuccess(event);
+                } else
+                    listener.onNoData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                listener.onFailed();
+            }
+        });
     }
 
 
@@ -417,8 +482,6 @@ public class Repository extends AndroidViewModel {
 
     public void fetchUsersByParticipations(List<Participation> participationList, FetchUsersByParticipationsListener listener) {
 
-        Query query = database.getReference().child("users");
-
         usersListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -477,84 +540,55 @@ public class Repository extends AndroidViewModel {
         }
     }
 
-    public Event createNewEvent(String title, String description, Address address) {
-        Event event = new Event();
-        event.setTitle(title);
-        event.setDescription((description));
-        event.setTimestamp(System.currentTimeMillis());
-        event.setAddress(address);
-        return event;
-    }
-
     public void removeEventsListener() {
-        database.getReference().child("events").removeEventListener(eventsListener);
-        eventsListener = null;
+        if (eventsListener!=null) {
+            database.getReference().child("events").removeEventListener(eventsListener);
+            eventsListener = null;
+        }
     }
 
     public void removeEventListener(String eventId) {
         if (eventListener!=null) {
-            database.getReference().child("event").child(eventId).removeEventListener(eventListener);
+            database.getReference().child("events").child(eventId).removeEventListener(eventListener);
             eventListener = null;
         }
     }
 
 
     public void removeOngoingEventsListener() {
-        database.getReference().child("events").removeEventListener(ongoingEventsListener);
-        ongoingEventsListener = null;
+        if (ongoingEventsListener!=null) {
+            database.getReference().child("events").removeEventListener(ongoingEventsListener);
+            ongoingEventsListener = null;
+        }
     }
 
     public void removeStatusListListener() {
-        database.getReference().child("status").removeEventListener(statusListListener);
-        statusListListener = null;
+        if (statusListListener!=null) {
+            database.getReference().child("status").removeEventListener(statusListListener);
+            statusListListener = null;
+        }
     }
 
     public void removeUserStatusIdListener() {
-        if (auth.getUid() != null) {
+        if ((userStatusIdListener!=null)&&(auth.getUid() != null)) {
             database.getReference().child("users").child(auth.getUid()).child("statusId").removeEventListener(userStatusIdListener);
             userStatusIdListener = null;
         }
     }
 
     public void removeUsersListener() {
-        database.getReference().child("users").removeEventListener(usersListener);
-        usersListener = null;
+        if (usersListener!=null) {
+            database.getReference().child("users").removeEventListener(usersListener);
+            usersListener = null;
+        }
     }
 
-    public void isConnected(IsConnectedListener listener) {
-        isConnectedListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean connected = Boolean.TRUE.equals(snapshot.getValue(Boolean.class));
-                if (connected)
-                    listener.onIsConnected();
-                else
-                    listener.onNoConnection();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-
-        database.getReference(".info/connected").addValueEventListener(isConnectedListener);
-
+    public void removeCurrentUserListener() {
+        if (currentUserListener!=null) {
+            database.getReference().child("users").child(auth.getUid()).removeEventListener(currentUserListener);
+            currentUserListener = null;
+        }
     }
 
-    public void removeIsConnectedListener() {
-        database.getReference().removeEventListener(isConnectedListener);
-        isConnectedListener = null;
-    }
-
-    public void clearAll() {
-
-        removeOngoingEventsListener();
-        removeEventsListener();
-        removeUsersListener();
-        removeStatusListListener();
-        removeUserStatusIdListener();
-
-    }
 
 }

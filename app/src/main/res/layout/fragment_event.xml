@@ -37,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:background="@drawable/ic_baseline_warning_amber_24"
+
                         android:padding="15dp" />
 
 
@@ -62,7 +62,6 @@
                         android:layout_below="@id/tvThreat"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:text="Pożar"
 
                         android:textColor="@color/text"
                         android:textSize="20sp" />
@@ -75,7 +74,7 @@
                         android:layout_below="@id/tvThreatType"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="10dp"
-                        android:text="Opis"
+
 
                         android:textColor="@color/text"
                         android:textSize="16sp" />
@@ -90,7 +89,6 @@
 
 
                         android:layout_marginTop="10dp"
-                        android:text="Zdarzenie trwające"
                         android:textColor="@color/grey_text"
                         android:textSize="16sp" />
 
@@ -155,7 +153,6 @@
                         android:layout_below="@id/tvLocalization"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:text="Adres"
 
                         android:textColor="@color/text"
                         android:textSize="20sp" />
@@ -170,7 +167,6 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="10dp"
 
-                        android:text="Region"
                         android:textColor="@color/text"
                         android:textSize="20sp" />
 
@@ -345,7 +341,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_baseline_delete_24"
-        android:visibility="visible"
+        android:visibility="gone"
         app:fabCustomSize="64dp"
         app:maxImageSize="32dp" />
 
@@ -358,7 +354,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_baseline_edit_24"
-        android:visibility="visible"
+        android:visibility="gone"
         app:fabCustomSize="64dp"
         app:maxImageSize="32dp" />
 

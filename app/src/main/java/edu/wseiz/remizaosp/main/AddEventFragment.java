@@ -53,32 +53,35 @@ private Repository repository;
         SpinnerAdapter adapter2 = new SpinnerAdapter(getContext(), threats);
         binding.spinnerThreat.setAdapter(adapter2);
 
-        binding.btnAddEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Event event = new Event();
-                event.setTitle(binding.spinnerThreat.getSelectedItem().toString());
-                event.setAddress(new Address(binding.etAddress.getText().toString(), binding.spinnerRegion.getSelectedItem().toString()));
-                event.setDescription(binding.etDescription.getText().toString());
-                event.setOngoing(binding.switchOngoing.isChecked());
-                event.setTimestamp(System.currentTimeMillis());
-                repository.addEvent(event, new AddEventListener() {
-                    @Override
-                    public void onSuccess(String generatedId) {
-                        Snackbar snackbar = Snackbar.make(binding.getRoot(), "Zdarzenie dodane", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                        Navigation.findNavController(binding.getRoot()).popBackStack();
-                    }
+        binding.btnAddEvent.setOnClickListener(v -> {
+            Event event = new Event();
+            event.setTitle(binding.spinnerThreat.getSelectedItem().toString());
+            event.setAddress(new Address(binding.etAddress.getText().toString(), binding.spinnerRegion.getSelectedItem().toString()));
+            event.setDescription(binding.etDescription.getText().toString());
+            event.setOngoing(binding.switchOngoing.isChecked());
+            event.setTimestamp(System.currentTimeMillis());
+            repository.addEvent(event, new AddEventListener() {
+                @Override
+                public void onSuccess(String generatedId) {
+                    Snackbar snackbar = Snackbar.make(binding.getRoot(), "Zdarzenie dodane", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                    Navigation.findNavController(binding.getRoot()).popBackStack();
+                }
 
-                    @Override
-                    public void onFailed() {
-                        Snackbar snackbar = Snackbar.make(binding.getRoot(), "Błąd", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    }
-                });
-            }
+                @Override
+                public void onFailed() {
+                    Snackbar snackbar = Snackbar.make(binding.getRoot(), "Błąd", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                }
+            });
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
