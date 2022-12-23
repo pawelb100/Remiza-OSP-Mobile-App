@@ -26,8 +26,7 @@ import edu.wseiz.remizaosp.listeners.AddEventListener;
 import edu.wseiz.remizaosp.listeners.FetchCurrentUserListener;
 import edu.wseiz.remizaosp.listeners.FetchEventListener;
 import edu.wseiz.remizaosp.listeners.FetchEventsListener;
-import edu.wseiz.remizaosp.listeners.FetchParticipationListListener;
-import edu.wseiz.remizaosp.listeners.FetchParticipationListener;
+import edu.wseiz.remizaosp.listeners.FetchMessagesListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusByIdListener;
 import edu.wseiz.remizaosp.listeners.FetchStatusListListener;
 import edu.wseiz.remizaosp.listeners.FetchUserRoleListener;
@@ -36,6 +35,7 @@ import edu.wseiz.remizaosp.listeners.FetchUsersByParticipationsListener;
 import edu.wseiz.remizaosp.listeners.FetchUsersListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Event;
+import edu.wseiz.remizaosp.models.Message;
 import edu.wseiz.remizaosp.models.Participation;
 import edu.wseiz.remizaosp.models.Role;
 import edu.wseiz.remizaosp.models.Status;
@@ -52,8 +52,8 @@ public class Repository extends AndroidViewModel {
     private ValueEventListener eventListener;
     private ValueEventListener ongoingEventsListener;
     private ValueEventListener usersListener;
+    private ValueEventListener chatListener;
 
-    private ValueEventListener currentUserListener;
 
     public Repository(@NonNull Application application) {
         super(application);
@@ -379,9 +379,8 @@ public class Repository extends AndroidViewModel {
 
     }
 
-    public void fetchCurrentUser(FetchCurrentUserListener listener) {
-
-        currentUserListener = new ValueEventListener() {
+    public void singleFetchCurrentUser(FetchCurrentUserListener listener) {
+        database.getReference().child("users").child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -394,12 +393,9 @@ public class Repository extends AndroidViewModel {
             public void onCancelled(@NonNull DatabaseError error) {
                 listener.onFailed();
             }
-        };
-
-        database.getReference().child("users").child(auth.getUid()).addValueEventListener(currentUserListener);
+        });
 
     }
-
 
     public void singleFetchEventById(String eventId, FetchEventListener listener) {
         database.getReference().child("events").child(eventId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -433,52 +429,6 @@ public class Repository extends AndroidViewModel {
         });
     }
 
-    public void fetchParticipation(Event event, FetchParticipationListener listener) {
-
-        if (auth.getUid() != null) {
-            database.getReference().child("events").child(event.getUid()).child("participation").child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        Participation participation = snapshot.getValue(Participation.class);
-                        listener.onSuccess(participation);
-                    } else
-                        listener.onNoData();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    listener.onFailed();
-                }
-            });
-        } else
-            listener.onFailed();
-    }
-
-    public void fetchParticipationList(Event event, FetchParticipationListListener listener) {
-
-        database.getReference().child("events").child(event.getUid()).child("participation").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                List<Participation> participationList = new ArrayList<>();
-
-                if (snapshot.exists()) {
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Participation participation = child.getValue(Participation.class);
-                        participationList.add(participation);
-                    }
-                    listener.onSuccess(participationList);
-                } else
-                    listener.onNoData();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                listener.onFailed();
-            }
-        });
-    }
 
     public void fetchUsersByParticipations(List<Participation> participationList, FetchUsersByParticipationsListener listener) {
 
@@ -517,7 +467,56 @@ public class Repository extends AndroidViewModel {
 
     }
 
+    public void fetchMessages(FetchMessagesListener listener) {
 
+        chatListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                List<Message> messageList = new ArrayList<>();
+
+                if (snapshot.exists()) {
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        Message message = child.getValue(Message.class);
+                        messageList.add(message);
+                        }
+                    }
+
+                listener.onSuccess(messageList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                listener.onFailed();
+            }
+        };
+
+        database.getReference().child("chat").addValueEventListener(chatListener);
+
+    }
+
+    public void sendMessage(Message message, UpdateListener listener) {
+
+        DatabaseReference ref = database.getReference().child("chat");
+        String key = ref.push().getKey();
+        message.setId(key);
+        ref.child(key).setValue(message).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                listener.onSuccess();
+            else
+                listener.onFailed();
+        });
+    }
+
+    public void deleteMessage(String messageId, UpdateListener listener) {
+
+        database.getReference().child("chat").child(messageId).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                listener.onSuccess();
+            else
+                listener.onFailed();
+        });
+    }
 
 
 
@@ -537,6 +536,13 @@ public class Repository extends AndroidViewModel {
             String key = ref.push().getKey();
             Status status = new Status(key, str[i]);
             ref.child(key).setValue(status);
+        }
+    }
+
+    public void removeChatListener() {
+        if (chatListener!=null) {
+            database.getReference().child("chat").removeEventListener(chatListener);
+            chatListener = null;
         }
     }
 
@@ -583,12 +589,8 @@ public class Repository extends AndroidViewModel {
         }
     }
 
-    public void removeCurrentUserListener() {
-        if (currentUserListener!=null) {
-            database.getReference().child("users").child(auth.getUid()).removeEventListener(currentUserListener);
-            currentUserListener = null;
-        }
-    }
+
+
 
 
 }

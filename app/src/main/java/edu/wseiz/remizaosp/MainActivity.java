@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
 
-        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        repository = viewModelProvider.get(Repository.class);
-
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.dashboardFragment, R.id.eventsFragment ,R.id.usersFragment, R.id.chatFragment, R.id.settingsFragment)
                 .setOpenableLayout(binding.DrawerLayout)
@@ -46,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
-        repository.fetchCurrentUser(new FetchCurrentUserListener() {
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        repository = viewModelProvider.get(Repository.class);
+
+        repository.singleFetchCurrentUser(new FetchCurrentUserListener() {
             @Override
             public void onSuccess(User user) {
                 View headView = binding.navigationView.getHeaderView(0);
