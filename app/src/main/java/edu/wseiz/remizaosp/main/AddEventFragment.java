@@ -18,8 +18,11 @@ import java.util.List;
 import edu.wseiz.remizaosp.adapters.SpinnerAdapter;
 import edu.wseiz.remizaosp.databinding.FragmentAddEventBinding;
 import edu.wseiz.remizaosp.listeners.AddEventListener;
+import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Address;
 import edu.wseiz.remizaosp.models.Event;
+import edu.wseiz.remizaosp.utils.NotificationSender;
+import edu.wseiz.remizaosp.utils.PushNotificationAsync;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
 
@@ -60,9 +63,28 @@ private Repository repository;
             event.setDescription(binding.etDescription.getText().toString());
             event.setOngoing(binding.switchOngoing.isChecked());
             event.setTimestamp(System.currentTimeMillis());
+            boolean sendNotification = binding.switchNotify.isChecked();
+
             repository.addEvent(event, new AddEventListener() {
                 @Override
                 public void onSuccess(String generatedId) {
+
+                    if (sendNotification) {
+
+                        PushNotificationAsync pna = new PushNotificationAsync("ALARM OSP", event.getTitle() + "\n" + event.getAddress().getStreet() + ", " + event.getAddress().getRegion(), new UpdateListener() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onFailed() {
+
+                            }
+                        });
+                        pna.execute();
+                    }
+
                     Snackbar snackbar = Snackbar.make(binding.getRoot(), "Zdarzenie dodane", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     Navigation.findNavController(binding.getRoot()).popBackStack();

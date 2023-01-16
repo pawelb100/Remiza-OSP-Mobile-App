@@ -27,6 +27,8 @@ import edu.wseiz.remizaosp.models.Address;
 import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Participation;
 import edu.wseiz.remizaosp.models.User;
+import edu.wseiz.remizaosp.utils.NotificationSender;
+import edu.wseiz.remizaosp.utils.PushNotificationAsync;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
 public class EditEventFragment extends Fragment {
@@ -99,10 +101,28 @@ public class EditEventFragment extends Fragment {
             newEvent.setAddress(new Address(binding.etAddress.getText().toString(), binding.spinnerRegion.getSelectedItem().toString()));
             newEvent.setDescription(binding.etDescription.getText().toString());
             newEvent.setOngoing(binding.switchOngoing.isChecked());
+            boolean sendNotification = binding.switchNotify.isChecked();
 
             repository.updateEvent(currentEvent, newEvent, new UpdateListener() {
                 @Override
                 public void onSuccess() {
+
+                    if (sendNotification) {
+                        PushNotificationAsync pna = new PushNotificationAsync("ALARM OSP", newEvent.getTitle() + "\n" + newEvent.getAddress().getStreet() + ", " + newEvent.getAddress().getRegion(), new UpdateListener() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onFailed() {
+
+                            }
+                        });
+                        pna.execute();
+                    }
+
+
                     info("Zdarzenie zapisane");
                     quit();
                 }

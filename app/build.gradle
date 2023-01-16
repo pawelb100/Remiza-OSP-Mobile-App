@@ -60,4 +60,6 @@ dependencies {
     //sharedViewModel
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
+    //OneSignal
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 }

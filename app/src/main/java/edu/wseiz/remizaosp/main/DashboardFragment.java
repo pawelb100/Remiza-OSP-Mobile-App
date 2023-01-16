@@ -28,6 +28,7 @@ import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Event;
 import edu.wseiz.remizaosp.models.Role;
 import edu.wseiz.remizaosp.models.Status;
+import edu.wseiz.remizaosp.utils.NotificationSender;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 
 public class DashboardFragment extends Fragment {

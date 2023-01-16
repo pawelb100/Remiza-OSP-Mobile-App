@@ -12,6 +12,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.onesignal.OneSignal;
+
+import org.json.JSONObject;
+
 import edu.wseiz.remizaosp.databinding.ActivityMainBinding;
 import edu.wseiz.remizaosp.listeners.FetchCurrentUserListener;
 import edu.wseiz.remizaosp.models.User;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Repository repository;
 
+    private static final String ONESIGNAL_APP_ID = "a5ab8de1-586c-4d80-a15f-60eb0111b4ad";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailed() {
+            }
+        });
+
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId(ONESIGNAL_APP_ID);
+        OneSignal.promptForPushNotifications();
+
+        OneSignal.postNotification("", new OneSignal.PostNotificationResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+
+            }
+
+            @Override
+            public void onFailure(JSONObject jsonObject) {
+
             }
         });
 
