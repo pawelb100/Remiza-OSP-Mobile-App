@@ -1,9 +1,11 @@
-package edu.wseiz.remizaosp;
+package edu.wseiz.remizaosp.activities;
 
 import android.os.Bundle;
 import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.wseiz.remizaosp.R;
 
 public class LoginActivity extends AppCompatActivity {
 

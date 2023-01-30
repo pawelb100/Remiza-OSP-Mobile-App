@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp.login;
+package edu.wseiz.remizaosp.fragments.login;
 
 import android.os.Bundle;
 

@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp.main;
+package edu.wseiz.remizaosp.fragments.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,26 +8,18 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import edu.wseiz.remizaosp.adapters.SpinnerAdapter;
-import edu.wseiz.remizaosp.adapters.UsersListAdapter;
 import edu.wseiz.remizaosp.databinding.FragmentEditEventBinding;
-import edu.wseiz.remizaosp.listeners.AddEventListener;
 import edu.wseiz.remizaosp.listeners.FetchEventListener;
-import edu.wseiz.remizaosp.listeners.FetchUsersByParticipationsListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Address;
 import edu.wseiz.remizaosp.models.Event;
-import edu.wseiz.remizaosp.models.Participation;
-import edu.wseiz.remizaosp.models.User;
-import edu.wseiz.remizaosp.utils.NotificationSender;
 import edu.wseiz.remizaosp.utils.PushNotificationAsync;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 

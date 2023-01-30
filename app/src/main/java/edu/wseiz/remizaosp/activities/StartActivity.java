@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp;
+package edu.wseiz.remizaosp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class StartActivity extends AppCompatActivity {
 

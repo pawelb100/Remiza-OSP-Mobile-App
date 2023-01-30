@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="edu.wseiz.remizaosp.login.LoginFragment"
+        android:name="edu.wseiz.remizaosp.fragments.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/registerFragment"
-        android:name="edu.wseiz.remizaosp.login.RegisterFragment"
+        android:name="edu.wseiz.remizaosp.fragments.login.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="edu.wseiz.remizaosp.login.WelcomeFragment"
+        android:name="edu.wseiz.remizaosp.fragments.login.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action

@@ -1,10 +1,9 @@
-package edu.wseiz.remizaosp.main;
+package edu.wseiz.remizaosp.fragments.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +20,6 @@ import edu.wseiz.remizaosp.listeners.AddEventListener;
 import edu.wseiz.remizaosp.listeners.UpdateListener;
 import edu.wseiz.remizaosp.models.Address;
 import edu.wseiz.remizaosp.models.Event;
-import edu.wseiz.remizaosp.utils.NotificationSender;
 import edu.wseiz.remizaosp.utils.PushNotificationAsync;
 import edu.wseiz.remizaosp.viewmodels.Repository;
 

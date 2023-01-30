@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp.login;
+package edu.wseiz.remizaosp.fragments.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import edu.wseiz.remizaosp.MainActivity;
+import edu.wseiz.remizaosp.activities.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentRegisterBinding;
 import edu.wseiz.remizaosp.models.Role;
-import edu.wseiz.remizaosp.models.Status;
 import edu.wseiz.remizaosp.models.User;
 
 public class RegisterFragment extends Fragment {

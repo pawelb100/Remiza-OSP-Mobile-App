@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="edu.wseiz.remizaosp.main.DashboardFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.DashboardFragment"
         android:label="Centrum"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
-        android:name="edu.wseiz.remizaosp.main.UsersFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.UsersFragment"
         android:label="Oddział"
         tools:layout="@layout/fragment_users" />
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="edu.wseiz.remizaosp.main.EventsFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.EventsFragment"
         android:label="Zdarzenia"
         tools:layout="@layout/fragment_events" >
         <action
@@ -33,22 +33,22 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="edu.wseiz.remizaosp.main.ChatFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.ChatFragment"
         android:label="Rozmowy"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="edu.wseiz.remizaosp.main.SettingsFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.SettingsFragment"
         android:label="Ustawienia"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/addEventFragment"
-        android:name="edu.wseiz.remizaosp.main.AddEventFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.AddEventFragment"
         android:label="Dodaj zdarzenie"
         tools:layout="@layout/fragment_add_event" />
     <fragment
         android:id="@+id/eventFragment"
-        android:name="edu.wseiz.remizaosp.main.EventFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.EventFragment"
         android:label="Zdarzenie"
         tools:layout="@layout/fragment_event" >
         <action
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/editEventFragment"
-        android:name="edu.wseiz.remizaosp.main.EditEventFragment"
+        android:name="edu.wseiz.remizaosp.fragments.main.EditEventFragment"
         android:label="Edytuj zdarzenie"
         tools:layout="@layout/fragment_edit_event" />
 </navigation>

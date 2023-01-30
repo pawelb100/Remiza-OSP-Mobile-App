@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.DashboardFragment">
+    tools:context=".fragments.main.DashboardFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/status_card"

@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp;
+package edu.wseiz.remizaosp.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +16,7 @@ import com.onesignal.OneSignal;
 
 import org.json.JSONObject;
 
+import edu.wseiz.remizaosp.R;
 import edu.wseiz.remizaosp.databinding.ActivityMainBinding;
 import edu.wseiz.remizaosp.listeners.FetchCurrentUserListener;
 import edu.wseiz.remizaosp.models.User;

@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp.main;
+package edu.wseiz.remizaosp.fragments.main;
 
 import android.os.Bundle;
 

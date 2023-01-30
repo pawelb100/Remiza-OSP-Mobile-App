@@ -526,6 +526,16 @@ public class Repository extends AndroidViewModel {
         auth.signOut();
     }
 
+    public void updateUserName(String name, UpdateListener listener) {
+        database.getReference().child("users").child(auth.getUid()).child("name").setValue(name).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                listener.onSuccess();
+            else
+                listener.onFailed();
+        });
+    }
+
+
     public void setDefaultStatusList() {
 
         DatabaseReference ref = database.getReference().child("status");

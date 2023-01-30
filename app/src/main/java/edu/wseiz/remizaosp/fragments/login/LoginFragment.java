@@ -1,4 +1,4 @@
-package edu.wseiz.remizaosp.login;
+package edu.wseiz.remizaosp.fragments.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import edu.wseiz.remizaosp.MainActivity;
+import edu.wseiz.remizaosp.activities.MainActivity;
 import edu.wseiz.remizaosp.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
