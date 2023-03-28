@@ -87,18 +87,6 @@ public class MainActivity extends AppCompatActivity {
         OneSignal.setAppId(ONESIGNAL_APP_ID);
         OneSignal.promptForPushNotifications();
 
-        OneSignal.postNotification("", new OneSignal.PostNotificationResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject jsonObject) {
-
-            }
-
-            @Override
-            public void onFailure(JSONObject jsonObject) {
-
-            }
-        });
-
     }
 
 
